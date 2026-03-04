@@ -78,11 +78,10 @@ var CEP_AUTH = (function () {
         }
     }
 
-    // ====== XỬ LÝ ĐĂNG NHẬP GOOGLE / FACEBOOK ======
+    // ====== PHẦN ĐƯỢC THÊM: XỬ LÝ ĐĂNG NHẬP MẠNG XÃ HỘI ======
     async function handleSocialLoginSuccess(user) {
         const doc = await db.collection('users').doc(user.uid).get();
         if (!doc.exists) {
-            // Lần đầu đăng nhập: tự động tạo hồ sơ bằng tên và ảnh của Google
             const userData = {
                 uid: user.uid,
                 fullname: user.displayName || 'Người dùng',
@@ -121,7 +120,7 @@ var CEP_AUTH = (function () {
             return { success: false, message: 'Đăng nhập Facebook thất bại (Cần cấu hình App ID)!' };
         }
     }
-    // ====================================================
+    // ==========================================================
 
     async function logout() {
         await auth.signOut();
