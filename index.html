@@ -983,6 +983,10 @@ body.dark-mode .user-msg { background: #7ececa; color: #111827; }
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
 <script src="cep-settings.js"></script>
 <script src="auth.js"></script>
 <script>
@@ -1293,7 +1297,7 @@ if(overlay) overlay.addEventListener('click', closeMenu);
 /* ═══════════════════════════════
    AUTH ACTIONS
 ═══════════════════════════════ */
-function doRegister() {
+async function doRegister() {
   if(typeof CEP_AUTH === 'undefined') return alert("Lỗi: Không tìm thấy thư viện AUTH!");
   
   var name = document.getElementById('regFullname').value.trim();
@@ -1309,7 +1313,7 @@ function doRegister() {
   if(pwd !== conf) return toast('errPwdMatch', 'error');
   if(!terms) return toast('errTerms', 'error');
 
-  var res = CEP_AUTH.register({
+  var res = await CEP_AUTH.register({
     fullname: name, email: email, phone: phone, password: pwd, role: role
   });
 
@@ -1322,7 +1326,7 @@ function doRegister() {
   }
 }
 
-function doLogin() {
+async function doLogin() {
   if(typeof CEP_AUTH === 'undefined') return alert("Lỗi: Không tìm thấy thư viện AUTH!");
 
   var email = document.getElementById('loginEmail').value.trim();
@@ -1331,9 +1335,9 @@ function doLogin() {
 
   if(!email || !pwd) return toast('errFill', 'error');
 
-  var res = CEP_AUTH.login(email, pwd, rem);
+  var res = await CEP_AUTH.login(email, pwd, rem);
   if(res.success) {
-    var msg = t('toastLoginOk').replace('{name}', res.user.fullname);
+    var msg = t('toastLoginOk').replace('{name}', res.user.fullname || "Bạn");
     if(typeof CEP_SETTINGS !== 'undefined') CEP_SETTINGS.showToast(msg, 'success');
     updateUserUI();
     showPage('page-home');
@@ -1342,41 +1346,24 @@ function doLogin() {
   }
 }
 
-function doLogout() {
+async function doLogout() {
   if(typeof CEP_AUTH !== 'undefined') {
     if(!confirm(t('confirmLogout'))) return;
-    CEP_AUTH.logout(); 
+    await CEP_AUTH.logout(); 
   }
 }
 
-function hashPasswordBypass(pw) {
-    var hash = 0; var salt = 'CEP_SALT_2024'; var str = pw + salt;
-    for (var i = 0; i < str.length; i++) {
-        var char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash |= 0;
-    }
-    return 'cep_' + Math.abs(hash).toString(36);
-}
-
-function doForgot() {
+async function doForgot() {
   if(typeof CEP_AUTH === 'undefined') return;
   var email = document.getElementById('forgotEmail').value.trim();
   if(!email) return toast('errFpFill', 'error');
 
-  var res = CEP_AUTH.forgotPassword(email);
+  var res = await CEP_AUTH.forgotPassword(email);
   if(res.success) {
-    var tempPw = Math.random().toString(36).slice(-8) + 'A1@';
-    
-    var users = JSON.parse(localStorage.getItem('cep_users') || '{}');
-    if(users[email]) {
-      users[email].password = hashPasswordBypass(tempPw);
-      localStorage.setItem('cep_users', JSON.stringify(users));
-    }
-
     document.getElementById('forgotFormArea').style.display = 'none';
     document.getElementById('forgotSuccess').style.display = 'block';
-    document.getElementById('newPwDisplay').innerText = tempPw;
+    document.getElementById('newPwDisplay').innerText = "Đã gửi Email!";
+    document.querySelector('#forgotSuccess p').innerText = "Vui lòng kiểm tra hộp thư email của bạn (bao gồm cả mục Spam) để tạo mật khẩu mới.";
   } else {
     CEP_SETTINGS.showToast(res.message, 'error');
   }
@@ -1413,7 +1400,7 @@ function checkMatch() {
   else { err.style.display = 'none'; ok.style.display = 'block'; }
 }
 
-function doChangePw() {
+async function doChangePw() {
   var cur = document.getElementById('cpCurrent').value;
   var n = document.getElementById('cpNew').value;
   var c = document.getElementById('cpConfirm').value;
@@ -1422,7 +1409,7 @@ function doChangePw() {
   if(n.length < 8) return toast('errPwdShort', 'error');
   if(n !== c) return toast('errPwdMatch', 'error');
   
-  var res = CEP_AUTH.changePassword(cur, n);
+  var res = await CEP_AUTH.changePassword(cur, n);
   if(res.success) {
     toast('toastCpOk', 'success');
     showPage('page-login');
@@ -1499,7 +1486,7 @@ function handleAv(input) {
   }
 }
 
-function saveProfile() {
+async function saveProfile() {
   var data = {
     fullname: document.getElementById('eFn').value.trim(),
     phone: document.getElementById('ePh').value.trim(),
@@ -1518,7 +1505,7 @@ function saveProfile() {
   if(!data.fullname) return toast('errNameEmpty', 'error');
   if(tempAvatar) data.avatar = tempAvatar;
 
-  var res = CEP_AUTH.updateProfile(data);
+  var res = await CEP_AUTH.updateProfile(data);
   if(res.success) {
     toast('toastSaveProfile', 'success');
     toggleEdit();
@@ -1541,7 +1528,7 @@ function updateUserUI() {
   var smSet = document.getElementById('smSettingsLink');
 
   if(typeof CEP_AUTH !== 'undefined' && CEP_AUTH.isLoggedIn()) {
-    var user = CEP_AUTH.getCurrentUser();
+    var user = CEP_AUTH.getCurrentUser() || {fullname: "Bạn", email: ""};
     authArea.innerHTML = '<button class="btn-hlogin" onclick="showPage(\'page-profile\')">👤 '+user.fullname.split(' ')[0]+'</button>';
     userBar.style.display = 'block';
     document.getElementById('hubName').innerText = t('welcomeBack') + ' ' + user.fullname + '!';
@@ -1569,11 +1556,6 @@ function doSearch() {
 
 function exportData() {
   toast('toastExport', 'success');
-  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(localStorage.getItem('cep_users') || '{}');
-  var dlAnchorElem = document.createElement('a');
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", "cep_data.json");
-  dlAnchorElem.click();
 }
 
 /* ═══════════════════════════════
