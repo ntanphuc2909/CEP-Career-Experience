@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEP - Career Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   CSS VARIABLES & RESET
+════════════════════════════════════════ */
+:root{
+  --primary:#2D5F5D;--secondary:#F4A261;--accent:#E76F51;
+  --gradient:linear-gradient(135deg,#2D5F5D 0%,#1A4645 100%);
+  --bg:#f8f9fa;--card:#fff;--text:#2C3E50;--text2:#6c757d;
+  --border:#e0e0e0;--header-bg:#fff;--header-shadow:0 2px 15px rgba(0,0,0,.07);
+  --hero-bg:var(--gradient);
+}
+body.dark-mode{
+  --bg:#0f1117;--card:#1a1d2e;--text:#e2e8f0;--text2:#94a3b8;
+  --border:#2d3748;--header-bg:#1a1d2e;--header-shadow:0 2px 15px rgba(0,0,0,.45);
+  --hero-bg:linear-gradient(135deg,#0d2828 0%,#091f1f 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;}
+a{text-decoration:none;}
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* ════════════════════════════════════════
+   AUTH PAGES
+════════════════════════════════════════ */
+.auth-bg{background:var(--gradient);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.auth-card{background:var(--card);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;max-width:920px;width:100%;display:grid;grid-template-columns:1fr 1fr;animation:fadeIn .5s ease;}
+body.dark-mode .auth-card{box-shadow:0 20px 60px rgba(0,0,0,.6);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.auth-left{background:var(--gradient);padding:56px 40px;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.logo-circle{width:90px;height:90px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:36px;color:#fff;margin-bottom:24px;box-shadow:0 8px 24px rgba(0,0,0,.2);cursor:pointer;transition:transform .6s;}
+.logo-circle:hover{transform:scale(1.08) rotate(360deg);}
+.auth-left h1{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:12px;}
+.auth-left p{font-size:14px;opacity:.9;line-height:1.6;}
+.benefits{margin-top:22px;width:100%;}
+.benefit-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;text-align:left;}
+.auth-right{padding:44px 40px;max-height:92vh;overflow-y:auto;background:var(--card);}
+.auth-header{text-align:center;margin-bottom:28px;}
+.auth-header h2{font-family:'Playfair Display',serif;font-size:24px;color:var(--primary);margin-bottom:6px;}
+body.dark-mode .auth-header h2{color:#7ececa;}
+.auth-header p{color:var(--text2);font-size:13px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;margin-bottom:6px;font-weight:500;font-size:14px;color:var(--text);}
+.form-group input,.form-group select{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;transition:all .25s;background:var(--card);color:var(--text);}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(45,95,93,.1);}
+body.dark-mode .form-group input:focus,body.dark-mode .form-group select:focus{border-color:#7ececa;box-shadow:0 0 0 3px rgba(126,206,202,.15);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.btn-main{width:100%;padding:13px;background:var(--gradient);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;font-family:'DM Sans',sans-serif;margin-bottom:4px;}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(45,95,93,.3);}
+.btn-main:active{transform:translateY(0);}
+.divider{text-align:center;margin:16px 0;position:relative;}
+.divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);}
+.divider span{background:var(--card);padding:0 12px;position:relative;color:var(--text2);font-size:12px;}
+.social-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.btn-social{padding:10px;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;font-family:'DM Sans',sans-serif;color:var(--text);}
+.btn-social:hover{border-color:var(--primary);}
+.link-row{text-align:center;font-size:13px;color:var(--text2);margin-top:8px;}
+.link-row a{color:var(--primary);font-weight:700;cursor:pointer;}
+body.dark-mode .link-row a{color:#7ececa;}
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;font-size:13px;}
+.terms-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--primary);}
+.terms-row label{color:var(--text2);line-height:1.5;cursor:pointer;}
+.terms-row a{color:var(--primary);font-weight:600;}
+body.dark-mode .terms-row a{color:#7ececa;}
+.form-options{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:13px;}
+.remember-me{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--text);}
+.remember-me input{accent-color:var(--primary);cursor:pointer;}
+.forgot-link{color:var(--primary);font-weight:600;font-size:13px;cursor:pointer;}
+body.dark-mode .forgot-link{color:#7ececa;}
+.info-box{background:#fff8f0;border-left:4px solid var(--secondary);padding:13px;border-radius:6px;font-size:13px;color:#555;margin-bottom:18px;line-height:1.5;}
+body.dark-mode .info-box{background:#1e2a3a;color:#cbd5e0;}
+.success-box{display:none;text-align:center;padding:28px;background:#e8f5e9;border-radius:12px;}
+body.dark-mode .success-box{background:#162516;}
+.success-box h3{color:var(--primary);margin-bottom:10px;font-size:18px;}
+body.dark-mode .success-box h3{color:#7ececa;}
+.success-box p{color:var(--text2);font-size:13px;line-height:1.6;}
+.strength-wrap{display:none;margin-top:8px;}
+.strength-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px;}
+.strength-fill{height:100%;border-radius:2px;transition:width .3s;}
+.strength-txt{font-size:12px;font-weight:600;}
+.sw-weak .strength-fill{width:33%;background:#f44336;}.sw-weak .strength-txt{color:#f44336;}
+.sw-medium .strength-fill{width:66%;background:#ff9800;}.sw-medium .strength-txt{color:#ff9800;}
+.sw-strong .strength-fill{width:100%;background:#4caf50;}.sw-strong .strength-txt{color:#4caf50;}
+.err-msg{color:#f44336;font-size:12px;margin-top:4px;display:none;}
+body.dark-mode .err-msg{color:#fc8181;}
+.ok-msg{color:#4caf50;font-size:12px;margin-top:4px;display:none;}
+body.dark-mode .ok-msg{color:#68d391;}
+.theme-btn-auth{margin-top:24px;padding:9px 20px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;border-radius:20px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;}
+.theme-btn-auth:hover{background:rgba(255,255,255,.25);}
+.fp-steps{margin-top:22px;text-align:left;width:100%;}
+.fp-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.fp-step-num{width:26px;height:26px;background:rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff;}
+.fp-step-text h4{font-size:13px;margin-bottom:2px;color:#fff;}
+.fp-step-text p{font-size:12px;opacity:.8;color:#fff;}
+
+/* ════════════════════════════════════════
+   INNER HEADER
+════════════════════════════════════════ */
+.inner-header{background:var(--header-bg);box-shadow:var(--header-shadow);position:sticky;top:0;z-index:1000;transition:background .3s,box-shadow .3s;}
+.hc{max-width:1200px;margin:0 auto;padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-sm{width:40px;height:40px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:15px;color:#fff;}
+.logo-text{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--primary);}
+body.dark-mode .logo-text{color:#7ececa;}
+.header-nav{display:flex;align-items:center;gap:4px;}
+.header-nav a{color:var(--text);text-decoration:none;font-weight:500;font-size:13px;padding:6px 12px;border-radius:7px;transition:all .2s;cursor:pointer;}
+.header-nav a:hover{background:rgba(45,95,93,.08);color:var(--primary);}
+body.dark-mode .header-nav a:hover{background:rgba(126,206,202,.12);color:#7ececa;}
+.header-nav .nav-active{background:rgba(45,95,93,.1);color:var(--primary);font-weight:600;}
+body.dark-mode .header-nav .nav-active{background:rgba(126,206,202,.12);color:#7ececa;}
+.theme-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.theme-btn:hover{border-color:var(--primary);}
+.nav-btn{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s;}
+.nav-logout{background:rgba(231,111,81,.1);color:#E76F51;}
+.nav-logout:hover{background:rgba(231,111,81,.2);}
+
+/* ════════════════════════════════════════
+   HOME / LANDING (career-experience style)
+════════════════════════════════════════ */
+.top-bar{background:var(--primary);color:#fff;padding:10px 0;text-align:center;font-size:13px;}
+.top-bar a{color:var(--secondary);font-weight:600;}
+/* Big header for home */
+.home-big-header{background:#111827;box-shadow:0 2px 20px rgba(0,0,0,.3);position:sticky;top:0;z-index:1000;}
+body.dark-mode .home-big-header{background:#0d1020;}
+.home-hc{max-width:1400px;margin:0 auto;padding:0 28px;height:64px;display:flex;align-items:center;gap:0;}
+.home-logo{display:flex;align-items:center;gap:12px;flex-shrink:0;margin-right:10px;cursor:pointer;}
+.home-logo-circle{width:44px;height:44px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:16px;color:#fff;transition:transform .3s;}
+.home-logo-circle:hover{transform:rotate(360deg) scale(1.1);}
+.home-logo-text{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#fff;line-height:1.3;}
+/* hamburger */
+.menu-toggle-btn{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;cursor:pointer;width:42px;height:42px;background:rgba(77,217,172,.12);border:1.5px solid rgba(77,217,172,.4);border-radius:50%;transition:all .25s;flex-shrink:0;margin:0 10px;}
+.menu-toggle-btn:hover{background:rgba(77,217,172,.22);border-color:#4DD9AC;}
+.menu-toggle-btn span{width:18px;height:2px;background:#4DD9AC;border-radius:2px;transition:all .35s cubic-bezier(.23,1,.32,1);display:block;}
+.menu-toggle-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.menu-toggle-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.menu-toggle-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+/* search */
+.home-search{flex:1;max-width:440px;margin:0 16px;position:relative;display:flex;align-items:center;}
+.home-search input{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 44px 10px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;transition:all .25s;}
+.home-search input::placeholder{color:rgba(255,255,255,.35);}
+.home-search input:focus{outline:none;border-color:#4DD9AC;background:rgba(77,217,172,.05);}
+.home-search-btn{position:absolute;right:6px;background:#2D5F5D;border:none;color:#fff;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .2s;}
+.home-search-btn:hover{background:#4DD9AC;}
+.home-right{display:flex;align-items:center;gap:0;margin-left:auto;flex-shrink:0;}
+.home-divider{width:1px;height:32px;background:rgba(255,255,255,.1);margin:0 4px;}
+.home-theme-btn{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;margin:0 4px;}
+.home-theme-btn:hover{background:rgba(255,255,255,.18);}
+.home-auth{display:flex;align-items:center;gap:8px;padding:0 12px;}
+.btn-hlogin{padding:8px 18px;background:transparent;color:rgba(255,255,255,.85);border:1.5px solid rgba(255,255,255,.2);border-radius:8px;font-weight:500;font-size:13px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.btn-hlogin:hover{border-color:#4DD9AC;color:#4DD9AC;}
+.btn-hreg{padding:8px 18px;background:#2D5F5D;color:#fff;border:1.5px solid #2D5F5D;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.btn-hreg:hover{background:#4DD9AC;border-color:#4DD9AC;color:#111827;}
+/* overlay & slide menu */
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0);display:none;z-index:1999;transition:background .35s ease;}
+.overlay.active{display:block;background:rgba(0,0,0,.55);}
+.slide-menu{position:fixed;top:0;left:-340px;width:310px;height:100vh;background:#111827;color:#fff;transition:left .38s cubic-bezier(.23,1,.32,1);z-index:2000;overflow-y:auto;display:flex;flex-direction:column;}
+body.dark-mode .slide-menu{background:#0d1020;}
+.slide-menu.open{left:0;box-shadow:8px 0 40px rgba(0,0,0,.4);}
+.sm-header{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(45,95,93,.25);}
+.sm-brand{display:flex;align-items:center;gap:10px;}
+.sm-circle{width:40px;height:40px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:14px;color:#fff;flex-shrink:0;}
+.sm-title{font-family:'Playfair Display',serif;font-size:16px;color:#4DD9AC;}
+.sm-title small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;}
+.sm-close{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.sm-close:hover{background:rgba(255,255,255,.15);}
+.sm-nav{display:flex;flex-direction:column;padding:10px 0;flex:1;}
+.sm-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:14px 22px 5px;}
+.sm-nav a{color:rgba(255,255,255,.82);padding:12px 22px;display:flex;align-items:center;gap:12px;text-decoration:none;font-size:14px;font-weight:500;transition:all .22s;position:relative;}
+.sm-nav a:hover,.sm-nav a.sm-active{color:#4DD9AC;background:rgba(77,217,172,.08);}
+.sm-nav a::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:60%;background:#4DD9AC;border-radius:0 2px 2px 0;transition:transform .22s;}
+.sm-nav a:hover::before,.sm-nav a.sm-active::before{transform:translateY(-50%) scaleY(1);}
+.sm-icon{width:18px;text-align:center;font-size:15px;flex-shrink:0;}
+.sm-divider{height:1px;background:rgba(255,255,255,.07);margin:8px 22px;}
+.sm-footer{padding:18px 22px;border-top:1px solid rgba(255,255,255,.07);}
+.sm-cta{display:block;background:var(--gradient);color:#fff;padding:11px 18px;border-radius:10px;text-align:center;font-weight:600;font-size:13px;margin-bottom:8px;cursor:pointer;}
+.sm-cta-sec{display:block;background:transparent;color:rgba(255,255,255,.7);padding:9px 18px;border-radius:10px;text-align:center;font-weight:500;font-size:13px;border:1px solid rgba(255,255,255,.15);cursor:pointer;transition:all .2s;}
+.sm-cta-sec:hover{border-color:#4DD9AC;color:#4DD9AC;}
+/* HERO */
+.hero-land{background:var(--gradient);position:relative;overflow:hidden;padding:100px 40px 80px;}
+.hero-land::before{content:'';position:absolute;top:-50%;right:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(244,162,97,.15) 0%,transparent 70%);border-radius:50%;animation:floatAnim 18s ease-in-out infinite;}
+@keyframes floatAnim{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-20px,25px) scale(1.08);}}
+.hero-content{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.hero-land h1{font-family:'Playfair Display',serif;font-size:58px;color:#fff;margin-bottom:18px;line-height:1.2;animation:fadeUp .8s ease .2s both;}
+.hero-land p{font-size:19px;color:rgba(255,255,255,.9);max-width:560px;margin-bottom:28px;line-height:1.7;animation:fadeUp .8s ease .4s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .8s ease .6s both;}
+.btn-cta{padding:15px 36px;background:var(--secondary);color:#1A1A2E;border:none;border-radius:50px;font-weight:700;font-size:16px;cursor:pointer;transition:all .3s;box-shadow:0 8px 24px rgba(244,162,97,.4);font-family:'DM Sans',sans-serif;}
+.btn-cta:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(244,162,97,.5);}
+.btn-cta-out{padding:14px 32px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6);border-radius:50px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.btn-cta-out:hover{background:rgba(255,255,255,.12);}
+/* SECTIONS */
+.section{max-width:1200px;margin:0 auto;padding:64px 32px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:36px;color:var(--text);margin-bottom:12px;text-align:center;}
+.sec-sub{color:var(--text2);font-size:16px;text-align:center;margin-bottom:48px;}
+/* Features */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;}
+.feat-card{background:var(--card);border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.06);transition:all .3s;}
+body.dark-mode .feat-card{box-shadow:0 4px 18px rgba(0,0,0,.3);}
+.feat-card:hover{transform:translateY(-8px);box-shadow:0 12px 36px rgba(0,0,0,.12);}
+.feat-icon{width:72px;height:72px;margin:0 auto 20px;background:var(--gradient);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:32px;}
+.feat-card h3{font-family:'Playfair Display',serif;color:var(--primary);font-size:20px;margin-bottom:10px;}
+body.dark-mode .feat-card h3{color:#7ececa;}
+.feat-card p{color:var(--text2);font-size:14px;line-height:1.7;}
+/* Departments */
+.dept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:28px;}
+.dept-card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08);transition:all .3s;cursor:pointer;}
+body.dark-mode .dept-card{box-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dept-card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(0,0,0,.14);}
+.dept-banner{height:180px;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;}
+.dept-banner.pr{background:linear-gradient(135deg,#1a4645 0%,#2D5F5D 100%);}
+.dept-banner.mkt{background:linear-gradient(135deg,#E76F51 0%,#F4A261 100%);}
+.dept-body{padding:24px;}
+.dept-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.badge-pr{background:rgba(45,95,93,.15);color:var(--primary);}
+body.dark-mode .badge-pr{background:rgba(126,206,202,.15);color:#7ececa;}
+.badge-mkt{background:rgba(231,111,81,.15);color:var(--accent);}
+.dept-card h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:8px;}
+.dept-card p{color:var(--text2);font-size:14px;line-height:1.6;margin-bottom:18px;}
+.dept-btn{padding:10px 22px;background:var(--gradient);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.dept-btn:hover{opacity:.9;transform:translateY(-1px);}
+/* Reviews */
+.reviews-bg{background:var(--card);padding:64px 32px;}
+body.dark-mode .reviews-bg{background:#0f1117;}
+.reviews-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
+.review-card{background:var(--bg);border-radius:16px;padding:28px;border:1px solid var(--border);transition:all .3s;}
+body.dark-mode .review-card{background:#1a1d2e;}
+.review-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.1);}
+.review-stars{color:#FFD700;font-size:18px;margin-bottom:10px;}
+.review-badge{display:inline-block;padding:4px 14px;background:var(--secondary);color:#fff;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:14px;}
+.review-text{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:18px;}
+.reviewer{display:flex;align-items:center;gap:12px;padding-top:14px;border-top:1px solid var(--border);}
+.reviewer-av{width:44px;height:44px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:16px;flex-shrink:0;}
+.reviewer h4{font-size:14px;color:var(--text);margin-bottom:2px;}
+.reviewer p{font-size:12px;color:var(--text2);}
+/* Why section */
+.why-bg{background:linear-gradient(135deg,#2D5F5D 0%,#1A4645 100%);color:#fff;padding:80px 32px;}
+.why-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.why-icon-big{width:100%;max-width:400px;height:380px;background:rgba(255,255,255,.1);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:120px;backdrop-filter:blur(4px);}
+.why-text h2{font-family:'Playfair Display',serif;font-size:40px;margin-bottom:20px;}
+.why-text p{font-size:16px;line-height:1.8;opacity:.9;margin-bottom:18px;}
+.why-point{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.why-dot{width:22px;height:22px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0;margin-top:2px;}
+/* Stats */
+.stats-strip{background:var(--card);padding:40px 32px;}
+.stats-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.stat-box{text-align:center;padding:24px;background:var(--bg);border-radius:12px;border:1px solid var(--border);}
+.stat-num{font-family:'Playfair Display',serif;font-size:32px;color:var(--primary);font-weight:700;margin-bottom:4px;}
+body.dark-mode .stat-num{color:#7ececa;}
+.stat-lbl{font-size:13px;color:var(--text2);}
+/* Footer */
+footer{background:#111827;color:#fff;padding:60px 32px 28px;}
+body.dark-mode footer{background:#080b12;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;margin-bottom:40px;}
+.footer-sec h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:18px;color:var(--secondary);}
+.footer-sec p,.footer-sec a{color:rgba(255,255,255,.75);font-size:14px;display:block;margin-bottom:10px;text-decoration:none;transition:color .2s;}
+.footer-sec a:hover{color:var(--secondary);}
+.footer-bottom{text-align:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:13px;}
+/* home user bar */
+.home-user-bar{max-width:1200px;margin:0 auto;padding:20px 32px 0;}
+.hub-inner{background:var(--card);border-radius:14px;padding:18px 24px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);border:1px solid var(--border);}
+.hub-av{width:48px;height:48px;border-radius:50%;background:var(--gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;overflow:hidden;}
+.hub-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.hub-info h3{font-weight:600;font-size:15px;color:var(--text);margin-bottom:2px;}
+.hub-info p{font-size:13px;color:var(--text2);}
+.hub-btns{margin-left:auto;display:flex;gap:8px;}
+.btn-sm{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s;}
+.btn-sm-p{background:var(--gradient);color:#fff;}
+.btn-sm-o{background:var(--card);color:var(--primary);border:1.5px solid var(--primary)!important;border:none;}
+
+/* ════════════════════════════════════════
+   PROFILE / SETTINGS / CHANGE PW
+════════════════════════════════════════ */
+.inner-wrap{max-width:860px;margin:36px auto;padding:0 24px;}
+.page-header{margin-bottom:28px;}
+.page-header h1{font-family:'Playfair Display',serif;font-size:30px;color:var(--primary);margin-bottom:4px;}
+body.dark-mode .page-header h1{color:#7ececa;}
+.page-header p{color:var(--text2);font-size:14px;}
+/* profile */
+.profile-banner{height:150px;background:var(--gradient);border-radius:16px 16px 0 0;position:relative;}
+.profile-avatar{width:96px;height:96px;border-radius:50%;background:var(--gradient);border:4px solid var(--card);position:absolute;bottom:-48px;left:32px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.15);}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.pcard{background:var(--card);border-radius:0 0 14px 14px;padding:64px 28px 28px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:18px;}
+.pcard + .pcard{border-radius:14px;padding-top:24px;}
+.pname{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.pmeta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+.pmeta span{font-size:13px;color:var(--text2);}
+.pbio{font-size:14px;color:var(--text);line-height:1.6;opacity:.8;}
+.pdetails{margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: grid; gap: 12px; font-size: 13.5px; color: var(--text);}
+.pdetails b{color: var(--primary);}
+body.dark-mode .pdetails b{color: #7ececa;}
+.pedit-btn{padding:8px 16px;background:var(--gradient);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;}
+.edit-sec{display:none;margin-top:24px;padding-top:24px;border-top:1.5px solid var(--border);}
+.edit-sec.show{display:block;}
+.efg{margin-bottom:14px;}
+.efg label{display:block;margin-bottom:5px;font-weight:500;font-size:13px;color:var(--text);}
+.efg input,.efg select,.efg textarea{width:100%;padding:10px 13px;border:2px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--card);color:var(--text);transition:all .25s;}
+.efg input:focus,.efg select:focus,.efg textarea:focus{outline:none;border-color:var(--primary);}
+.efg textarea{resize:vertical;min-height:72px;}
+.efr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:0;}
+.edit-actions{display:flex;gap:10px;margin-top:6px;}
+.btn-save{padding:10px 22px;background:var(--gradient);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-cancel-ed{padding:10px 18px;background:var(--card);color:var(--primary);border:2px solid var(--primary);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.av-upload{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
+.av-preview{width:64px;height:64px;border-radius:50%;background:var(--gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;overflow:hidden;flex-shrink:0;}
+.av-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.btn-av{padding:8px 14px;background:var(--secondary);color:#fff;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;display:inline-block;}
+/* settings */
+.settings-card{background:var(--card);border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+body.dark-mode .settings-card{box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.settings-card h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--primary);margin-bottom:16px;padding-bottom:12px;border-bottom:1.5px solid var(--border);}
+body.dark-mode .settings-card h3{color:#7ececa;}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;}
+.setting-info h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.setting-info p{font-size:12px;color:var(--text2);}
+.sact-btn{padding:8px 16px;border:2px solid var(--border);border-radius:8px;background:var(--card);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text);transition:all .2s;}
+.sact-btn:hover{border-color:var(--primary);color:var(--primary);}
+.sact-btn.danger{border-color:#e76f51;color:#e76f51;}
+.sact-btn.danger:hover{background:rgba(231,111,81,.08);}
+.toggle{position:relative;display:inline-block;width:48px;height:26px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.tslider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:13px;transition:.3s;}
+.tslider:before{position:absolute;content:'';height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+input:checked+.tslider{background:var(--primary);}
+input:checked+.tslider:before{transform:translateX(22px);}
+/* language grid */
+.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-top:10px;}
+.lang-opt{padding:12px 8px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:all .22s;text-align:center;background:var(--card);}
+.lang-opt:hover{border-color:#aaa;transform:translateY(-2px);}
+.lang-opt.active{border-color:var(--primary);background:rgba(45,95,93,.06);}
+body.dark-mode .lang-opt.active{border-color:#7ececa;background:rgba(126,206,202,.1);}
+.lang-flag{font-size:26px;margin-bottom:5px;}
+.lang-name{font-size:12px;font-weight:600;color:var(--text);}
+/* change password */
+.cp-card{background:var(--card);border-radius:14px;padding:28px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+body.dark-mode .cp-card{box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.sec-info{background:#e3f2fd;border-left:4px solid #2196f3;padding:16px;border-radius:8px;margin-bottom:24px;}
+body.dark-mode .sec-info{background:#1a2744;border-left-color:#3b82f6;}
+.sec-info h3{color:var(--primary);margin-bottom:8px;font-size:14px;}
+body.dark-mode .sec-info h3{color:#7ececa;}
+.sec-info ul{margin-left:16px;font-size:13px;color:var(--text2);line-height:1.9;}
+.pw-wrap{position:relative;}
+.pw-wrap input{width:100%;padding:11px 42px 11px 13px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;transition:all .25s;background:var(--card);color:var(--text);}
+.pw-wrap input:focus{outline:none;border-color:var(--primary);}
+.tpw{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:17px;user-select:none;}
+.cp-actions{display:flex;gap:12px;margin-top:20px;}
+.btn-cp{padding:11px 24px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;flex:1;border:none;transition:all .2s;}
+.btn-cp-p{background:var(--gradient);color:#fff;}
+.btn-cp-p:hover{opacity:.9;}
+.btn-cp-s{background:var(--card);color:var(--primary);border:2px solid var(--primary)!important;border:none;}
+
+/* TOAST */
+#_toast{position:fixed;bottom:24px;right:24px;z-index:99999;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:500;color:#fff;box-shadow:0 6px 24px rgba(0,0,0,.2);transform:translateY(70px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);max-width:320px;line-height:1.5;pointer-events:none;}
+#_toast.show{transform:translateY(0);opacity:1;pointer-events:auto;}
+
+/* ════════════════════════════════════════
+   AI CHATBOT CSS
+════════════════════════════════════════ */
+#cep-chatbot-icon {
+  position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px;
+  background: var(--gradient); color: #fff; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 28px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25); cursor: pointer; z-index: 9999;
+  transition: transform 0.3s;
+}
+#cep-chatbot-icon:hover { transform: scale(1.1); }
+#cep-chatbot-panel {
+  position: fixed; bottom: 90px; right: 24px; width: 340px; height: 450px;
+  background: var(--card); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column; overflow: hidden; z-index: 9999;
+  opacity: 0; pointer-events: none; transform: translateY(20px); transition: all 0.3s;
+  border: 1px solid var(--border);
+}
+#cep-chatbot-panel.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.chat-header {
+  background: var(--gradient); color: #fff; padding: 14px 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-weight: 600; font-size: 15px; font-family: 'DM Sans', sans-serif;
+}
+.chat-close { cursor: pointer; font-size: 16px; opacity: 0.8; transition: 0.2s; }
+.chat-close:hover { opacity: 1; transform: scale(1.1); }
+.chat-body {
+  flex: 1; padding: 16px; overflow-y: auto; background: var(--bg);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.chat-msg { max-width: 82%; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; word-wrap: break-word; }
+.bot-msg { background: var(--card); color: var(--text); align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+.user-msg { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+body.dark-mode .user-msg { background: #7ececa; color: #111827; }
+.chat-footer {
+  padding: 12px; background: var(--card); border-top: 1px solid var(--border);
+  display: flex; gap: 8px;
+}
+.chat-footer input {
+  flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: 20px;
+  background: var(--bg); color: var(--text); outline: none; font-family: 'DM Sans', sans-serif; font-size: 13.5px; transition: border 0.2s;
+}
+.chat-footer input:focus { border-color: var(--primary); }
+.chat-footer button {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--gradient);
+  color: #fff; border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: 0.2s;
+}
+.chat-footer button:hover { transform: scale(1.05); }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .why-inner{grid-template-columns:1fr;}
+  .why-icon-big{max-width:100%;height:220px;font-size:80px;}
+}
+@media(max-width:768px){
+  .auth-card{grid-template-columns:1fr;}
+  .auth-left{padding:32px 24px;}
+  .auth-right{padding:28px 20px;max-height:none;}
+  .form-row,.efr{grid-template-columns:1fr;}
+  .hero-land h1{font-size:36px;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .home-search{display:none;}
+  .dept-grid,.features-grid{grid-template-columns:1fr;}
+  .lang-grid{grid-template-columns:repeat(2,1fr);}
+  .inner-wrap{padding:0 14px;}
+  .cp-actions,.edit-actions{flex-direction:column;}
+  .hub-btns{display:none;}
+  .logo-text{display:none;}
+  #cep-chatbot-panel { width: calc(100% - 48px); right: 24px; bottom: 90px; }
+}
+</style>
+</head>
+<body>
+<div id="_toast"></div>
+
+<div class="page active" id="page-login">
+  <div class="auth-bg">
+    <div class="auth-card">
+      <div class="auth-left">
+        <div class="logo-circle" onclick="showPage('page-home')">CEP</div>
+        <h1 data-i18n="loginWelcome">Chào mừng trở lại!</h1>
+        <p data-i18n="loginSubLeft">Khám phá hàng ngàn cơ hội học tập về PR & Marketing</p>
+        <button class="theme-btn-auth" id="loginThemeBtn"></button>
+      </div>
+      <div class="auth-right">
+        <div class="auth-header">
+          <h2 data-i18n="loginH2">Đăng nhập</h2>
+          <p data-i18n="loginSub">Đăng nhập để tiếp tục hành trình học tập</p>
+        </div>
+        <div class="form-group">
+          <label data-i18n="emailLbl">Email</label>
+          <input type="email" id="loginEmail" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label data-i18n="pwLbl">Mật khẩu</label>
+          <input type="password" id="loginPassword" autocomplete="current-password">
+        </div>
+        <div class="form-options">
+          <label class="remember-me"><input type="checkbox" id="loginRemember"> <span data-i18n="rememberMe">Ghi nhớ đăng nhập</span></label>
+          <span class="forgot-link" onclick="showPage('page-forgot')" data-i18n="forgotLink">Quên mật khẩu?</span>
+        </div>
+        <button class="btn-main" onclick="doLogin()" data-i18n="loginBtn">Đăng nhập</button>
+        <div class="divider"><span data-i18n="orWith">Hoặc đăng nhập với</span></div>
+        <div class="social-row">
+          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔵 Facebook</button>
+          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔴 Google</button>
+        </div>
+        <div class="link-row" data-i18n-html="noAccountRow">Chưa có tài khoản? <a onclick="showPage('page-register')">Đăng ký ngay</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-register">
+  <div class="auth-bg">
+    <div class="auth-card" style="max-width:960px;">
+      <div class="auth-left">
+        <div class="logo-circle" onclick="showPage('page-home')">CEP</div>
+        <h1 data-i18n="regWelcome">Tham gia cùng chúng tôi!</h1>
+        <p data-i18n="regSubLeft">Bắt đầu hành trình với PR & Marketing chuyên nghiệp</p>
+        <div class="benefits">
+          <div class="benefit-item">✅ <span data-i18n="b1">Bài tập thực chiến PR</span></div>
+          <div class="benefit-item">✅ <span data-i18n="b2">Bài tập thực chiến Marketing</span></div>
+          <div class="benefit-item">✅ <span data-i18n="b3">Hỗ trợ 24/7</span></div>
+          <div class="benefit-item">✅ <span data-i18n="b4">Cộng đồng học viên</span></div>
+        </div>
+        <button class="theme-btn-auth" id="registerThemeBtn"></button>
+      </div>
+      <div class="auth-right">
+        <div class="auth-header">
+          <h2 data-i18n="regH2">Đăng ký tài khoản</h2>
+          <p data-i18n="regSub">Tạo tài khoản miễn phí để bắt đầu</p>
+        </div>
+        <div class="form-group">
+          <label data-i18n="fullnameLbl">Họ và tên *</label>
+          <input type="text" id="regFullname" autocomplete="name">
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label data-i18n="emailLbl">Email *</label><input type="email" id="regEmail" autocomplete="email"></div>
+          <div class="form-group"><label data-i18n="phoneLbl">Số điện thoại</label><input type="tel" id="regPhone"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="pwLbl">Mật khẩu *</label>
+            <input type="password" id="regPassword" oninput="checkStrength(this.value,'regStr')" autocomplete="new-password">
+            <div class="strength-wrap" id="regStr"><div class="strength-bar"><div class="strength-fill"></div></div><div class="strength-txt"></div></div>
+          </div>
+          <div class="form-group"><label data-i18n="confirmPwLbl">Xác nhận mật khẩu *</label><input type="password" id="regConfirm" autocomplete="new-password"></div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="roleLbl">Bạn là</label>
+          <select id="regRole">
+            <option value="" data-i18n="roleDefault">Chọn vai trò</option>
+            <option value="student" data-i18n="roleStudent">Học sinh / Sinh viên</option>
+            <option value="professional" data-i18n="rolePro">Người đi làm</option>
+            <option value="teacher" data-i18n="roleTeacher">Giáo viên</option>
+            <option value="other" data-i18n="roleOther">Khác</option>
+          </select>
+        </div>
+        <div class="terms-row">
+          <input type="checkbox" id="regTerms">
+          <label for="regTerms" data-i18n-html="termsLabel">Tôi đồng ý với <a href="#">Điều khoản</a> và <a href="#">Chính sách bảo mật</a></label>
+        </div>
+        <button class="btn-main" onclick="doRegister()" data-i18n="regBtn">Đăng ký</button>
+        <div class="divider"><span data-i18n="orWith">Hoặc đăng ký với</span></div>
+        <div class="social-row">
+          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔵 Facebook</button>
+          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔴 Google</button>
+        </div>
+        <div class="link-row" data-i18n-html="hasAccountRow">Đã có tài khoản? <a onclick="showPage('page-login')">Đăng nhập ngay</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-forgot">
+  <div class="auth-bg">
+    <div class="auth-card" style="max-width:820px;">
+      <div class="auth-left">
+        <div class="logo-circle" style="font-size:42px;" onclick="showPage('page-home')">🔒</div>
+        <h1 data-i18n="fpTitle">Quên mật khẩu?</h1>
+        <p data-i18n="fpSub">Đừng lo! Chúng tôi sẽ giúp bạn khôi phục tài khoản</p>
+        <div class="fp-steps">
+          <div class="fp-step"><div class="fp-step-num">1</div><div class="fp-step-text"><h4 data-i18n="fp1h">Nhập email</h4><p data-i18n="fp1p">Email đã đăng ký</p></div></div>
+          <div class="fp-step"><div class="fp-step-num">2</div><div class="fp-step-text"><h4 data-i18n="fp2h">Nhận mật khẩu mới</h4><p data-i18n="fp2p">Hiển thị ngay trên màn hình</p></div></div>
+          <div class="fp-step"><div class="fp-step-num">3</div><div class="fp-step-text"><h4 data-i18n="fp3h">Đăng nhập lại</h4><p data-i18n="fp3p">Dùng mật khẩu mới</p></div></div>
+        </div>
+        <button class="theme-btn-auth" id="forgotThemeBtn"></button>
+      </div>
+      <div class="auth-right">
+        <div class="auth-header">
+          <h2 data-i18n="fpH2">Khôi phục mật khẩu</h2>
+          <p data-i18n="fpSubRight">Nhập email để nhận mật khẩu mới</p>
+        </div>
+        <div class="info-box">💡 <strong data-i18n="fpNote">Mật khẩu mới sẽ được hiển thị ngay trên màn hình này.</strong></div>
+        <div id="forgotFormArea">
+          <div class="form-group">
+            <label data-i18n="emailLbl">Địa chỉ Email</label>
+            <input type="email" id="forgotEmail">
+          </div>
+          <button class="btn-main" onclick="doForgot()">📨 <span data-i18n="fpBtn">Khôi phục mật khẩu</span></button>
+          <div class="link-row" style="margin-top:14px;"><a onclick="showPage('page-login')" data-i18n="fpBackLink">← Quay lại đăng nhập</a></div>
+        </div>
+        <div class="success-box" id="forgotSuccess">
+          <div style="font-size:48px;margin-bottom:12px;">✅</div>
+          <h3 data-i18n="fpSuccessTitle">Khôi phục thành công!</h3>
+          <p data-i18n="fpSuccessDesc">Mật khẩu mới của bạn là:</p>
+          <div id="newPwDisplay" style="font-size:22px;font-weight:700;color:var(--primary);margin:12px 0;background:rgba(45,95,93,.08);padding:12px;border-radius:8px;letter-spacing:2px;"></div>
+          <p style="font-size:12px;color:#aaa;" data-i18n="fpCopyHint">Hãy sao chép và đổi mật khẩu sau khi đăng nhập!</p>
+          <button onclick="showPage('page-login')" style="margin-top:16px;padding:10px 24px;background:var(--gradient);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;font-family:'DM Sans',sans-serif;" data-i18n="fpBackBtn">Đăng nhập ngay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-home">
+  <div class="top-bar">
+    <span data-i18n="topBar">Giờ làm việc: 8:00 – 22:00 | Liên hệ: </span>
+    <a href="tel:0356348552">0356348552</a>
+  </div>
+  <header class="home-big-header">
+    <div class="home-hc">
+      <div class="home-logo" onclick="showPage('page-home')">
+        <div class="home-logo-circle">CEP</div>
+        <div class="home-logo-text">Career<br>Experience</div>
+      </div>
+      <button class="menu-toggle-btn" id="menuToggle"><span></span><span></span><span></span></button>
+      <div class="home-search">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm...">
+        <button class="home-search-btn" onclick="doSearch()">🔍</button>
+      </div>
+      <div class="home-right">
+        <button class="home-theme-btn" id="homeThemeBtn"></button>
+        <div class="home-divider"></div>
+        <div class="home-auth" id="homeAuthArea"></div>
+      </div>
+    </div>
+  </header>
+  <div class="overlay" id="overlay"></div>
+  <div class="slide-menu" id="slideMenu">
+    <div class="sm-header">
+      <div class="sm-brand"><div class="sm-circle">CEP</div><div class="sm-title">Danh mục<small>Career Experience</small></div></div>
+      <button class="sm-close" id="smClose">✕</button>
+    </div>
+    <nav class="sm-nav">
+      <div class="sm-label" data-i18n="smMain">Điều hướng chính</div>
+      <a onclick="closeMenu();showPage('page-home')" class="sm-active"><span class="sm-icon">🏠</span><span data-i18n="navHome">Trang chủ</span></a>
+      <a onclick="closeMenu();scrollToId('dept-section')"><span class="sm-icon">📚</span><span data-i18n="smDepts">Ngành học</span></a>
+      <a onclick="closeMenu();scrollToId('why-section')"><span class="sm-icon">⭐</span><span data-i18n="smAbout">Về CEP</span></a>
+      <div class="sm-divider"></div>
+      <div class="sm-label" data-i18n="smAccount">Tài khoản</div>
+      <a id="smLoginLink" onclick="closeMenu();showPage('page-login')"><span class="sm-icon">🔑</span><span data-i18n="navLogin">Đăng nhập</span></a>
+      <a id="smRegLink" onclick="closeMenu();showPage('page-register')"><span class="sm-icon">✨</span><span data-i18n="navRegister">Đăng ký</span></a>
+      <a id="smProfileLink" onclick="closeMenu();showPage('page-profile')" style="display:none"><span class="sm-icon">👤</span><span data-i18n="navProfile">Hồ sơ</span></a>
+      <a id="smSettingsLink" onclick="closeMenu();showPage('page-settings')" style="display:none"><span class="sm-icon">⚙️</span><span data-i18n="navSettings">Cài đặt</span></a>
+    </nav>
+    <div class="sm-footer">
+      <div class="sm-cta" onclick="closeMenu();showPage('page-register')" data-i18n="smRegCta">🚀 Đăng ký ngay hôm nay</div>
+      <div class="sm-cta-sec" onclick="closeMenu();scrollToId('footer-contact')" data-i18n="smContact">📩 Liên hệ tư vấn</div>
+    </div>
+  </div>
+  <section class="hero-land">
+    <div class="hero-content">
+      <h1 data-i18n-html="heroH1">Khởi đầu sự nghiệp<br>của bạn ngay hôm nay</h1>
+      <p data-i18n="heroP">Khám phá và phát triển kỹ năng PR & Marketing chuyên nghiệp cùng Career Experience</p>
+      <div class="hero-btns">
+        <button class="btn-cta" onclick="scrollToId('dept-section')" data-i18n="heroExplore">🚀 Khám phá ngay</button>
+        <button class="btn-cta-out" onclick="scrollToId('why-section')" data-i18n="heroLearn">📖 Tìm hiểu thêm</button>
+      </div>
+    </div>
+  </section>
+  <div id="homeUserBar" style="display:none;">
+    <div class="home-user-bar">
+      <div class="hub-inner">
+        <div class="hub-av" id="hubAv"></div>
+        <div class="hub-info"><h3 id="hubName"></h3><p id="hubSub"></p></div>
+        <div class="hub-btns">
+          <button class="btn-sm btn-sm-o" onclick="showPage('page-profile')" data-i18n="navProfile">👤 Hồ sơ</button>
+          <button class="btn-sm btn-sm-p" onclick="toast('toastComingSoon','info')" data-i18n="continueLearning">▶ Tiếp tục học</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-lbl" data-i18n="statDepts">Ngành học</div></div>
+      <div class="stat-box"><div class="stat-num">500+</div><div class="stat-lbl" data-i18n="statStudents">Học viên</div></div>
+      <div class="stat-box"><div class="stat-num">50+</div><div class="stat-lbl" data-i18n="statTasks">Bài tập thực chiến</div></div>
+      <div class="stat-box"><div class="stat-num">98%</div><div class="stat-lbl" data-i18n="statSat">Hài lòng</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-title" data-i18n="featTitle">Tại sao chọn CEP?</div>
+    <div class="sec-sub" data-i18n="featSub">Nền tảng học tập thực chiến dành riêng cho PR & Marketing</div>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon">🎯</div><h3 data-i18n="f1h">Bài tập thực chiến</h3><p data-i18n="f1p">Tự tạo và thực hành bài tập sát với thực tế ngành PR & Marketing</p></div>
+      <div class="feat-card"><div class="feat-icon">🤝</div><h3 data-i18n="f2h">Cộng đồng kết nối</h3><p data-i18n="f2p">Kết nối với các chuyên gia và học viên trong ngành</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3 data-i18n="f3h">Theo dõi tiến độ</h3><p data-i18n="f3p">Hệ thống theo dõi và đánh giá tiến độ học tập của bạn</p></div>
+      <div class="feat-card"><div class="feat-icon">🏆</div><h3 data-i18n="f4h">Chứng nhận hoàn thành</h3><p data-i18n="f4p">Nhận chứng nhận sau khi hoàn thành các bài tập ngành</p></div>
+    </div>
+  </div>
+  <div class="section" id="dept-section">
+    <div class="sec-title" data-i18n="deptTitle">Ngành học</div>
+    <div class="sec-sub" data-i18n="deptSub">Chọn ngành bạn muốn phát triển — nội dung bài tập sẽ được cập nhật sớm</div>
+    <div class="dept-grid">
+      <div class="dept-card">
+        <div class="dept-banner pr">📣</div>
+        <div class="dept-body">
+          <div class="dept-badge badge-pr" data-i18n="prBadge">PR</div>
+          <h3 data-i18n="prTitle">Public Relations</h3>
+          <p data-i18n="prDesc">Phát triển kỹ năng quan hệ công chúng, xây dựng thương hiệu và quản lý truyền thông. Bài tập thực chiến sẽ được thêm vào sớm.</p>
+          <button class="dept-btn" onclick="toast('toastComingSoon','info')" data-i18n="deptBtnSoon">🔜 Sắp ra mắt</button>
+        </div>
+      </div>
+      <div class="dept-card">
+        <div class="dept-banner mkt">📈</div>
+        <div class="dept-body">
+          <div class="dept-badge badge-mkt" data-i18n="mktBadge">Marketing</div>
+          <h3 data-i18n="mktTitle">Marketing</h3>
+          <p data-i18n="mktDesc">Thực hành Digital Marketing, Content Strategy và Brand Management. Bài tập thực chiến sẽ được thêm vào sớm.</p>
+          <button class="dept-btn" onclick="toast('toastComingSoon','info')" data-i18n="deptBtnSoon">🔜 Sắp ra mắt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="why-bg" id="why-section">
+    <div class="why-inner">
+      <div class="why-icon-big">👩‍💼</div>
+      <div class="why-text">
+        <h2 data-i18n="whyTitle">Tại sao nên chọn Career Experience?</h2>
+        <p data-i18n="whyDesc">CEP không chỉ là nơi bạn học — đây là nền tảng nơi bạn kết nối với đam mê, khám phá tiềm năng và xây dựng sự nghiệp mơ ước trong lĩnh vực PR & Marketing.</p>
+        <div class="why-point"><div class="why-dot">✓</div><p data-i18n="why1">Bài tập được thiết kế bởi các chuyên gia thực chiến trong ngành PR & Marketing.</p></div>
+        <div class="why-point"><div class="why-dot">✓</div><p data-i18n="why2">Chất lượng luôn được đặt lên hàng đầu để người học tiếp nhận kiến thức hiệu quả nhất.</p></div>
+        <div class="why-point"><div class="why-dot">✓</div><p data-i18n="why3">Cộng đồng học viên năng động, hỗ trợ nhau trong suốt quá trình học tập.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-bg">
+    <div class="section" style="padding-top:0;padding-bottom:0;">
+      <div class="sec-title" data-i18n="reviewTitle">Review về CEP</div>
+      <div class="sec-sub" data-i18n="reviewSub">Học viên nói gì về chúng tôi</div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-badge" data-i18n="reviewBadge">Tuyệt vời!</div>
+        <p class="review-text" data-i18n="r1">CEP có nội dung rất thực tế, giúp mình áp dụng ngay vào công việc PR. Giao diện thân thiện, dễ dùng.</p>
+        <div class="reviewer"><div class="reviewer-av">MT</div><div><h4>Ms. Trang Đồng</h4><p data-i18n="r1role">Học viên PR</p></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-badge" data-i18n="reviewBadge">Tuyệt vời!</div>
+        <p class="review-text" data-i18n="r2">Mảng Marketing ở CEP rất bài bản. Bài tập sát thực tế, giúp mình hiểu sâu hơn về Digital Marketing.</p>
+        <div class="reviewer"><div class="reviewer-av">TB</div><div><h4>Mr. Tùng Bùi</h4><p data-i18n="r2role">Học viên Marketing</p></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-badge" data-i18n="reviewBadge">Tuyệt vời!</div>
+        <p class="review-text" data-i18n="r3">Cộng đồng học viên CEP rất nhiệt tình. Mình học được rất nhiều từ các bạn cùng ngành PR & Marketing.</p>
+        <div class="reviewer"><div class="reviewer-av">LA</div><div><h4>Ms. Lan Anh</h4><p data-i18n="r3role">Học viên PR & Marketing</p></div></div>
+      </div>
+    </div>
+  </div>
+  <footer id="footer-contact">
+    <div class="footer-inner">
+      <div class="footer-sec">
+        <h3>Career Experience</h3>
+        <p data-i18n="footerAbout">Nền tảng phát triển kỹ năng PR & Marketing chuyên nghiệp dành cho sinh viên và người đi làm.</p>
+      </div>
+      <div class="footer-sec">
+        <h3 data-i18n="footerLinks">Liên kết nhanh</h3>
+        <a onclick="scrollToId('dept-section')" data-i18n="smDepts">Ngành học</a>
+        <a onclick="scrollToId('why-section')" data-i18n="smAbout">Về CEP</a>
+        <a onclick="showPage('page-register')" data-i18n="navRegister">Đăng ký</a>
+      </div>
+      <div class="footer-sec">
+        <h3 data-i18n="footerContact">Liên hệ</h3>
+        <p>📍 <span data-i18n="footerAddr">Trường ĐH Văn Lang, TP. HCM</span></p>
+        <p>📞 0356348552</p>
+        <p>✉️ ntanphuc2909@gmail.com</p>
+      </div>
+      <div class="footer-sec">
+        <h3 data-i18n="footerHours">Giờ làm việc</h3>
+        <p data-i18n="fh1">T2–T6: 8:00 – 22:00</p>
+        <p data-i18n="fh2">T7: 8:00 – 20:00</p>
+        <p data-i18n="fh3">CN: 9:00 – 18:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Career Experience (CEP). All rights reserved.</div>
+  </footer>
+</div>
+
+<div class="page" id="page-profile">
+  <header class="inner-header">
+    <div class="hc">
+      <div class="logo" onclick="showPage('page-home')"><div class="logo-sm">CEP</div><span class="logo-text">Career Experience</span></div>
+      <nav class="header-nav">
+        <a onclick="showPage('page-home')" data-i18n="navHome">🏠 Trang chủ</a>
+        <a class="nav-active" data-i18n="navProfile">👤 Hồ sơ</a>
+        <a onclick="showPage('page-settings')" data-i18n="navSettings">⚙️ Cài đặt</a>
+        <a onclick="showPage('page-changepass')" data-i18n="navChangePwd">🔑 Đổi mật khẩu</a>
+        <button class="theme-btn" id="profileThemeBtn"></button>
+        <button class="nav-btn nav-logout" onclick="doLogout()" data-i18n="navLogout">🚪 Đăng xuất</button>
+      </nav>
+    </div>
+  </header>
+  <div class="inner-wrap" style="max-width:860px;">
+    <div class="profile-banner"><div class="profile-avatar" id="profileAv"></div></div>
+    <div class="pcard">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="flex:1;">
+          <div class="pname" id="pName"></div>
+          <div class="pmeta" id="pMeta"></div>
+          <div class="pbio" id="pBio"></div>
+          <div class="pdetails" id="pDetails"></div>
+        </div>
+        <button class="pedit-btn" onclick="toggleEdit()" data-i18n="editBtn">✏️ Chỉnh sửa</button>
+      </div>
+      
+      <div class="edit-sec" id="editSec">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:var(--primary);margin-bottom:18px;" data-i18n="editTitle">Chỉnh sửa hồ sơ</h3>
+        <div class="av-upload">
+          <div class="av-preview" id="avPreview"></div>
+          <div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px;" data-i18n="avatarLbl">Ảnh đại diện</div>
+            <label class="btn-av" for="avInput">📷 <span data-i18n="choosePhoto">Chọn ảnh</span></label>
+            <input type="file" id="avInput" accept="image/*" style="display:none;" onchange="handleAv(this)">
+            <div style="font-size:11px;color:var(--text2);margin-top:5px;">JPG, PNG · Max 2MB</div>
+          </div>
+        </div>
+        <div class="efr">
+          <div class="efg"><label data-i18n="fullnameLbl">Họ và tên *</label><input id="eFn"></div>
+          <div class="efg"><label data-i18n="phoneLbl">Số điện thoại</label><input id="ePh"></div>
+        </div>
+        <div class="efr">
+          <div class="efg"><label data-i18n="dobLbl">Ngày sinh</label><input type="date" id="eDob"></div>
+          <div class="efg"><label data-i18n="genderLbl">Giới tính</label>
+            <select id="eGen">
+              <option value="male" data-i18n="male">Nam</option>
+              <option value="female" data-i18n="female">Nữ</option>
+              <option value="otherGender" data-i18n="otherGender">Khác</option>
+            </select>
+          </div>
+        </div>
+        <div class="efr">
+          <div class="efg"><label data-i18n="occLbl">Nghề nghiệp</label><input id="eOc"></div>
+          <div class="efg"><label data-i18n="locLbl">Địa điểm</label><input id="eLc"></div>
+        </div>
+        <div class="efr">
+          <div class="efg"><label data-i18n="webLbl">Website / LinkedIn</label><input id="eWb"></div>
+          <div class="efg"><label data-i18n="fbLbl">Facebook Link</label><input id="eFb"></div>
+        </div>
+        <div class="efg">
+          <label data-i18n="roleLbl">Vai trò</label>
+          <select id="eRl">
+            <option value="student" data-i18n="roleStudent">Học sinh / Sinh viên</option>
+            <option value="professional" data-i18n="rolePro">Người đi làm</option>
+            <option value="teacher" data-i18n="roleTeacher">Giáo viên</option>
+            <option value="other" data-i18n="roleOther">Khác</option>
+          </select>
+        </div>
+        <div class="efg"><label data-i18n="bioLbl">Giới thiệu</label><textarea id="eBi"></textarea></div>
+        <div class="efg"><label data-i18n="eduLbl">Học vấn</label><textarea id="eEdu" rows="2"></textarea></div>
+        <div class="efg"><label data-i18n="expLbl">Kinh nghiệm</label><textarea id="eExp" rows="2"></textarea></div>
+        <div class="efg"><label data-i18n="skillsLbl">Kỹ năng</label><input id="eSkills" placeholder="VD: SEO, Content, Thiết kế..."></div>
+        
+        <div class="edit-actions">
+          <button class="btn-save" onclick="saveProfile()" data-i18n="saveBtn">💾 Lưu thay đổi</button>
+          <button class="btn-cancel-ed" onclick="toggleEdit()" data-i18n="cancelBtn">Hủy</button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:var(--primary);margin-bottom:16px;" data-i18n="statsTitle">📊 Thống kê học tập</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <div style="text-align:center;padding:16px;background:var(--bg);border-radius:10px;"><div style="font-size:28px;font-weight:700;color:var(--primary);">0</div><div style="font-size:13px;color:var(--text2);" data-i18n="statActive">Bài tập đang làm</div></div>
+        <div style="text-align:center;padding:16px;background:var(--bg);border-radius:10px;"><div style="font-size:28px;font-weight:700;color:var(--primary);">0</div><div style="font-size:13px;color:var(--text2);" data-i18n="statCerts">Chứng nhận</div></div>
+        <div style="text-align:center;padding:16px;background:var(--bg);border-radius:10px;"><div style="font-size:28px;font-weight:700;color:var(--primary);">0h</div><div style="font-size:13px;color:var(--text2);" data-i18n="statHours">Giờ học</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-settings">
+  <header class="inner-header">
+    <div class="hc">
+      <div class="logo" onclick="showPage('page-home')"><div class="logo-sm">CEP</div><span class="logo-text">Career Experience</span></div>
+      <nav class="header-nav">
+        <a onclick="showPage('page-home')" data-i18n="navHome">🏠 Trang chủ</a>
+        <a onclick="showPage('page-profile')" data-i18n="navProfile">👤 Hồ sơ</a>
+        <a class="nav-active" data-i18n="navSettings">⚙️ Cài đặt</a>
+        <a onclick="showPage('page-changepass')" data-i18n="navChangePwd">🔑 Đổi mật khẩu</a>
+        <button class="theme-btn" id="settingsThemeBtn"></button>
+        <button class="nav-btn nav-logout" onclick="doLogout()" data-i18n="navLogout">🚪 Đăng xuất</button>
+      </nav>
+    </div>
+  </header>
+  <div class="inner-wrap">
+    <div class="page-header"><h1 data-i18n="settingsH1">⚙️ Cài đặt</h1><p data-i18n="settingsSub">Tuỳ chỉnh trải nghiệm của bạn</p></div>
+    <div class="settings-card">
+      <h3 data-i18n="sApp">🎨 Giao diện</h3>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="sDarkH">Chế độ tối</h4><p data-i18n="sDarkP">Bật để bảo vệ mắt vào ban đêm</p></div>
+        <label class="toggle"><input type="checkbox" id="darkToggle" onchange="toggleDark(this.checked)"><span class="tslider"></span></label>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3 data-i18n="sLangH">🌐 Ngôn ngữ</h3>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:12px;">
+        <div class="setting-info"><h4 data-i18n="sLangTitle">Ngôn ngữ hiển thị</h4><p data-i18n="sLangDesc">Áp dụng toàn bộ giao diện ứng dụng</p></div>
+        <div class="lang-grid">
+          <div class="lang-opt" data-lang="vi" onclick="setLang('vi')"><div class="lang-flag">🇻🇳</div><div class="lang-name">Tiếng Việt</div></div>
+          <div class="lang-opt" data-lang="en" onclick="setLang('en')"><div class="lang-flag">🇬🇧</div><div class="lang-name">English</div></div>
+          <div class="lang-opt" data-lang="zh" onclick="setLang('zh')"><div class="lang-flag">🇨🇳</div><div class="lang-name">中文</div></div>
+          <div class="lang-opt" data-lang="ja" onclick="setLang('ja')"><div class="lang-flag">🇯🇵</div><div class="lang-name">日本語</div></div>
+          <div class="lang-opt" data-lang="ko" onclick="setLang('ko')"><div class="lang-flag">🇰🇷</div><div class="lang-name">한국어</div></div>
+          <div class="lang-opt" data-lang="fr" onclick="setLang('fr')"><div class="lang-flag">🇫🇷</div><div class="lang-name">Français</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3 data-i18n="sNotif">🔔 Thông báo</h3>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="sSysN">Thông báo hệ thống</h4><p data-i18n="sSysNd">Nhận thông báo về bài tập và cập nhật</p></div>
+        <label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="sEmailN">Thông báo email</h4><p data-i18n="sEmailNd">Nhận email về tiến trình học tập</p></div>
+        <label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3 data-i18n="sSec">🔐 Bảo mật</h3>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="sCpH">Đổi mật khẩu</h4><p data-i18n="sCpP">Cập nhật mật khẩu định kỳ</p></div>
+        <button class="sact-btn" onclick="showPage('page-changepass')" data-i18n="sCpBtn">Đổi mật khẩu</button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="s2fH">Xác thực 2 bước</h4><p data-i18n="s2fP">Tăng cường bảo mật</p></div>
+        <button class="sact-btn" onclick="toast('toastComingSoon','info')" data-i18n="s2fBtn">Thiết lập</button>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3 data-i18n="sAccH">⚠️ Tài khoản</h3>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="sExH">Xuất dữ liệu</h4><p data-i18n="sExP">Tải xuống toàn bộ dữ liệu</p></div>
+        <button class="sact-btn" onclick="exportData()" data-i18n="sExBtn">📥 Xuất</button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4 data-i18n="sLoH">Đăng xuất</h4><p data-i18n="sLoP">Đăng xuất khỏi thiết bị này</p></div>
+        <button class="sact-btn danger" onclick="doLogout()" data-i18n="sLoBtn">🚪 Đăng xuất</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-changepass">
+  <header class="inner-header">
+    <div class="hc">
+      <div class="logo" onclick="showPage('page-home')"><div class="logo-sm">CEP</div><span class="logo-text">Career Experience</span></div>
+      <nav class="header-nav">
+        <a onclick="showPage('page-home')" data-i18n="navHome">🏠 Trang chủ</a>
+        <a onclick="showPage('page-profile')" data-i18n="navProfile">👤 Hồ sơ</a>
+        <a onclick="showPage('page-settings')" data-i18n="navSettings">⚙️ Cài đặt</a>
+        <a class="nav-active" data-i18n="navChangePwd">🔑 Đổi mật khẩu</a>
+        <button class="theme-btn" id="cpThemeBtn"></button>
+        <button class="nav-btn nav-logout" onclick="doLogout()" data-i18n="navLogout">🚪 Đăng xuất</button>
+      </nav>
+    </div>
+  </header>
+  <div class="inner-wrap" style="max-width:560px;">
+    <div class="page-header"><h1 data-i18n="cpH1">🔑 Đổi mật khẩu</h1><p data-i18n="cpSub">Bảo vệ tài khoản với mật khẩu mạnh</p></div>
+    <div class="cp-card">
+      <div class="sec-info">
+        <h3 data-i18n="cpTipsTitle">🔐 Mật khẩu mạnh nên có:</h3>
+        <ul>
+          <li data-i18n="cpT1">Ít nhất 8 ký tự</li>
+          <li data-i18n="cpT2">Chữ hoa và chữ thường</li>
+          <li data-i18n="cpT3">Số và ký tự đặc biệt</li>
+          <li data-i18n="cpT4">Không dùng thông tin cá nhân</li>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label data-i18n="cpCurLbl">Mật khẩu hiện tại *</label>
+        <div class="pw-wrap"><input type="password" id="cpCurrent"><span class="tpw" onclick="togglePw('cpCurrent',this)">👁️</span></div>
+        <div class="err-msg" id="cpCurErr" data-i18n="cpCurErr">Mật khẩu hiện tại không đúng</div>
+      </div>
+      <div class="form-group">
+        <label data-i18n="cpNewLbl">Mật khẩu mới *</label>
+        <div class="pw-wrap"><input type="password" id="cpNew" oninput="checkStrength(this.value,'cpStr');checkMatch()"><span class="tpw" onclick="togglePw('cpNew',this)">👁️</span></div>
+        <div class="strength-wrap" id="cpStr"><div class="strength-bar"><div class="strength-fill"></div></div><div class="strength-txt"></div></div>
+        <div class="err-msg" id="cpNewErr" data-i18n="cpNewErr">Mật khẩu phải có ít nhất 8 ký tự</div>
+      </div>
+      <div class="form-group">
+        <label data-i18n="cpConLbl">Xác nhận mật khẩu mới *</label>
+        <div class="pw-wrap"><input type="password" id="cpConfirm" oninput="checkMatch()"><span class="tpw" onclick="togglePw('cpConfirm',this)">👁️</span></div>
+        <div class="err-msg" id="cpConErr" data-i18n="cpConErr">Mật khẩu không khớp</div>
+        <div class="ok-msg" id="cpConOk" data-i18n="cpConOk">✓ Mật khẩu khớp</div>
+      </div>
+      <div class="cp-actions">
+        <button class="btn-cp btn-cp-s" onclick="showPage('page-settings')" style="border:2px solid var(--primary);" data-i18n="cancelBtn">Hủy</button>
+        <button class="btn-cp btn-cp-p" onclick="doChangePw()" data-i18n="cpSaveBtn">✅ Cập nhật</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cep-chatbot-icon" onclick="toggleChat()">🤖</div>
+<div id="cep-chatbot-panel">
+  <div class="chat-header">
+    <div data-i18n="chatHeader">🤖 Trợ lý AI - CEP</div>
+    <div class="chat-close" onclick="toggleChat()">✖</div>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-msg bot-msg" data-i18n="chatGreeting">Chào bạn! 👋 Mình là Trợ lý AI của CEP. Mình có thể giúp gì cho bạn?</div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chatInput" data-i18n="chatInput" placeholder="Nhập câu hỏi tại đây..." onkeypress="handleChatKey(event)">
+    <button onclick="sendChatMessage()">➤</button>
+  </div>
+</div>
+
+<script src="cep-settings.js"></script>
+<script src="auth.js"></script>
+<script>
+/* DỊCH THUẬT ĐẦY ĐỦ 6 NGÔN NGỮ (THÊM PHẦN BOT AI) */
+var I18N = {
+  vi: {
+    navHome:'🏠 Trang chủ',navProfile:'👤 Hồ sơ',navSettings:'⚙️ Cài đặt',navChangePwd:'🔑 Đổi mật khẩu',navLogout:'🚪 Đăng xuất',navLogin:'Đăng nhập',navRegister:'Đăng ký',
+    loginWelcome:'Chào mừng trở lại!',loginSubLeft:'Khám phá cơ hội học tập về PR & Marketing',loginH2:'Đăng nhập',loginSub:'Đăng nhập để tiếp tục hành trình học tập',
+    emailLbl:'Email',pwLbl:'Mật khẩu',rememberMe:'Ghi nhớ đăng nhập',forgotLink:'Quên mật khẩu?',loginBtn:'Đăng nhập',orWith:'Hoặc đăng nhập với',
+    noAccountRow:'Chưa có tài khoản? <a onclick="showPage(\'page-register\')" style="cursor:pointer;">Đăng ký ngay</a>',
+    regWelcome:'Tham gia cùng chúng tôi!',regSubLeft:'Bắt đầu hành trình PR & Marketing chuyên nghiệp',regH2:'Đăng ký tài khoản',regSub:'Tạo tài khoản miễn phí',
+    b1:'Bài tập thực chiến PR',b2:'Bài tập thực chiến Marketing',b3:'Hỗ trợ 24/7',b4:'Cộng đồng học viên',
+    fullnameLbl:'Họ và tên *',phoneLbl:'Số điện thoại',confirmPwLbl:'Xác nhận mật khẩu *',roleLbl:'Bạn là',
+    roleDefault:'Chọn vai trò',roleStudent:'Học sinh / Sinh viên',rolePro:'Người đi làm',roleTeacher:'Giáo viên',roleOther:'Khác',
+    termsLabel:'Tôi đồng ý với <a href="#">Điều khoản</a> và <a href="#">Chính sách bảo mật</a>',regBtn:'Đăng ký',
+    hasAccountRow:'Đã có tài khoản? <a onclick="showPage(\'page-login\')" style="cursor:pointer;">Đăng nhập ngay</a>',
+    fpTitle:'Quên mật khẩu?',fpSub:'Đừng lo! Chúng tôi sẽ giúp bạn khôi phục tài khoản',fp1h:'Nhập email',fp1p:'Email đã đăng ký',fp2h:'Nhận mật khẩu mới',fp2p:'Hiển thị ngay trên màn hình',fp3h:'Đăng nhập lại',fp3p:'Dùng mật khẩu mới',
+    fpH2:'Khôi phục mật khẩu',fpSubRight:'Nhập email để nhận mật khẩu mới',fpNote:'Mật khẩu mới sẽ được hiển thị ngay trên màn hình này.',fpBtn:'Khôi phục mật khẩu',fpBackLink:'← Quay lại đăng nhập',
+    fpSuccessTitle:'Khôi phục thành công!',fpSuccessDesc:'Mật khẩu mới của bạn là:',fpCopyHint:'Hãy sao chép và đổi mật khẩu sau khi đăng nhập!',fpBackBtn:'Đăng nhập ngay',
+    topBar:'Giờ làm việc: 8:00 – 22:00 | Liên hệ: ',smMain:'Điều hướng chính',smDepts:'Ngành học',smAbout:'Về CEP',smAccount:'Tài khoản',smRegCta:'🚀 Đăng ký ngay hôm nay',smContact:'📩 Liên hệ tư vấn',
+    heroH1:'Khởi đầu sự nghiệp<br>của bạn ngay hôm nay',heroP:'Khám phá và phát triển kỹ năng PR & Marketing chuyên nghiệp cùng Career Experience',heroExplore:'🚀 Khám phá ngay',heroLearn:'📖 Tìm hiểu thêm',
+    statDepts:'Ngành học',statStudents:'Học viên',statTasks:'Bài tập thực chiến',statSat:'Hài lòng',featTitle:'Tại sao chọn CEP?',featSub:'Nền tảng học tập thực chiến dành riêng cho PR & Marketing',
+    f1h:'Bài tập thực chiến',f1p:'Tự tạo và thực hành bài tập sát thực tế ngành PR & Marketing',f2h:'Cộng đồng kết nối',f2p:'Kết nối với các chuyên gia và học viên trong ngành',f3h:'Theo dõi tiến độ',f3p:'Hệ thống theo dõi và đánh giá tiến độ học tập của bạn',f4h:'Chứng nhận hoàn thành',f4p:'Nhận chứng nhận sau khi hoàn thành các bài tập ngành',
+    deptTitle:'Ngành học',deptSub:'Chọn ngành bạn muốn phát triển — nội dung bài tập sẽ được cập nhật sớm',prBadge:'PR',prTitle:'Public Relations',prDesc:'Phát triển kỹ năng quan hệ công chúng, xây dựng thương hiệu và quản lý truyền thông.',
+    mktBadge:'Marketing',mktTitle:'Marketing',mktDesc:'Thực hành Digital Marketing, Content Strategy và Brand Management.',deptBtnSoon:'🔜 Sắp ra mắt',
+    whyTitle:'Tại sao nên chọn Career Experience?',whyDesc:'CEP không chỉ là nơi bạn học — đây là nền tảng nơi bạn kết nối với đam mê, khám phá tiềm năng và xây dựng sự nghiệp mơ ước trong PR & Marketing.',
+    why1:'Bài tập được thiết kế bởi các chuyên gia thực chiến trong ngành PR & Marketing.',why2:'Chất lượng luôn được đặt lên hàng đầu để người học tiếp nhận kiến thức hiệu quả nhất.',why3:'Cộng đồng học viên năng động, hỗ trợ nhau trong suốt quá trình học tập.',
+    reviewTitle:'Review về CEP',reviewSub:'Học viên nói gì về chúng tôi',reviewBadge:'Tuyệt vời!',
+    r1:'CEP có nội dung rất thực tế, giúp mình áp dụng ngay vào công việc PR. Giao diện thân thiện, dễ dùng.',r1role:'Học viên PR',r2:'Mảng Marketing ở CEP rất bài bản. Bài tập sát thực tế.',r2role:'Học viên Marketing',r3:'Cộng đồng học viên CEP rất nhiệt tình. Mình học được rất nhiều.',r3role:'Học viên PR & Marketing',
+    footerAbout:'Nền tảng phát triển kỹ năng PR & Marketing dành cho sinh viên và người đi làm.',footerLinks:'Liên kết nhanh',footerContact:'Liên hệ',footerAddr:'Trường ĐH Văn Lang, TP. HCM',footerHours:'Giờ làm việc',fh1:'T2–T6: 8:00 – 22:00',fh2:'T7: 8:00 – 20:00',fh3:'CN: 9:00 – 18:00',
+    continueLearning:'▶ Tiếp tục học',editBtn:'✏️ Chỉnh sửa',editTitle:'Chỉnh sửa hồ sơ',avatarLbl:'Ảnh đại diện',choosePhoto:'Chọn ảnh',occLbl:'Nghề nghiệp',locLbl:'Địa điểm',webLbl:'Website / LinkedIn',bioLbl:'Giới thiệu',saveBtn:'💾 Lưu thay đổi',cancelBtn:'Hủy',
+    dobLbl:'Ngày sinh',genderLbl:'Giới tính',fbLbl:'Link Facebook',eduLbl:'Học vấn',expLbl:'Kinh nghiệm',skillsLbl:'Kỹ năng',male:'Nam',female:'Nữ',otherGender:'Khác',
+    statsTitle:'📊 Thống kê học tập',statActive:'Bài tập đang làm',statCerts:'Chứng nhận',statHours:'Giờ học',noIntro:'Chưa có giới thiệu. Hãy thêm vài dòng về bản thân!',roleLblMap:{student:'Học sinh / Sinh viên',professional:'Người đi làm',teacher:'Giáo viên',other:'Khác'},joinedDate:'Tham gia',welcomeBack:'Chào mừng trở lại,',
+    settingsH1:'⚙️ Cài đặt',settingsSub:'Tuỳ chỉnh trải nghiệm của bạn',sApp:'🎨 Giao diện',sDarkH:'Chế độ tối',sDarkP:'Bật để bảo vệ mắt vào ban đêm',sLangH:'🌐 Ngôn ngữ',sLangTitle:'Ngôn ngữ hiển thị',sLangDesc:'Áp dụng toàn bộ giao diện ứng dụng',
+    sNotif:'🔔 Thông báo',sSysN:'Thông báo hệ thống',sSysNd:'Nhận thông báo về bài tập và cập nhật',sEmailN:'Thông báo email',sEmailNd:'Nhận email về tiến trình học tập',
+    sSec:'🔐 Bảo mật',sCpH:'Đổi mật khẩu',sCpP:'Cập nhật mật khẩu định kỳ',sCpBtn:'Đổi mật khẩu',s2fH:'Xác thực 2 bước',s2fP:'Tăng cường bảo mật',s2fBtn:'Thiết lập',
+    sAccH:'⚠️ Tài khoản',sExH:'Xuất dữ liệu',sExP:'Tải xuống toàn bộ dữ liệu',sExBtn:'📥 Xuất',sLoH:'Đăng xuất',sLoP:'Đăng xuất khỏi thiết bị này',sLoBtn:'🚪 Đăng xuất',
+    cpH1:'🔑 Đổi mật khẩu',cpSub:'Bảo vệ tài khoản với mật khẩu mạnh',cpTipsTitle:'🔐 Mật khẩu mạnh nên có:',cpT1:'Ít nhất 8 ký tự',cpT2:'Chữ hoa và chữ thường',cpT3:'Số và ký tự đặc biệt',cpT4:'Không dùng thông tin cá nhân',
+    cpCurLbl:'Mật khẩu hiện tại *',cpCurErr:'Mật khẩu hiện tại không đúng',cpNewLbl:'Mật khẩu mới *',cpNewErr:'Mật khẩu phải có ít nhất 8 ký tự',cpConLbl:'Xác nhận mật khẩu mới *',cpConErr:'Mật khẩu không khớp',cpConOk:'✓ Mật khẩu khớp',cpSaveBtn:'✅ Cập nhật',
+    strengthWeak:'⚠️ Yếu',strengthMed:'👍 Trung bình',strengthStrong:'💪 Mạnh',confirmLogout:'Bạn có chắc muốn đăng xuất?',
+    toastLoginOk:'✅ Đăng nhập thành công! Chào {name} 🎉',toastRegOk:'✅ Đăng ký thành công! Vui lòng đăng nhập.',toastCpOk:'✅ Đổi mật khẩu thành công!',toastSaveProfile:'✅ Cập nhật hồ sơ thành công!',toastExport:'✅ Đã xuất dữ liệu!',toastComingSoon:'Tính năng sắp ra mắt!',
+    errFill:'❌ Vui lòng điền đầy đủ thông tin!',errPwdShort:'❌ Mật khẩu phải ít nhất 8 ký tự!',errPwdMatch:'❌ Mật khẩu xác nhận không khớp!',errTerms:'❌ Vui lòng đồng ý điều khoản!',errFpFill:'❌ Vui lòng nhập email!',errNameEmpty:'❌ Họ và tên không được trống!',loginRequired:'⚠️ Vui lòng đăng nhập!',
+    /* AI CHATBOT KEYS */
+    chatHeader: '🤖 Trợ lý AI - CEP', chatInput: 'Nhập câu hỏi tại đây...', chatGreeting: 'Chào bạn! 👋 Mình là Trợ lý AI của CEP. Mình có thể giúp gì cho bạn?'
+  },
+  en: {
+    navHome:'🏠 Home',navProfile:'👤 Profile',navSettings:'⚙️ Settings',navChangePwd:'🔑 Change Password',navLogout:'🚪 Logout',navLogin:'Login',navRegister:'Register',
+    loginWelcome:'Welcome Back!',loginSubLeft:'Explore PR & Marketing learning opportunities',loginH2:'Login',loginSub:'Sign in to continue your journey',
+    emailLbl:'Email',pwLbl:'Password',rememberMe:'Remember me',forgotLink:'Forgot password?',loginBtn:'Login',orWith:'Or login with',
+    noAccountRow:'No account? <a onclick="showPage(\'page-register\')" style="cursor:pointer;">Sign up</a>',
+    regWelcome:'Join Us!',regSubLeft:'Start your professional PR & Marketing journey',regH2:'Create Account',regSub:'Create a free account to get started',
+    b1:'PR Practical Tasks',b2:'Marketing Practical Tasks',b3:'24/7 Support',b4:'Student Community',
+    fullnameLbl:'Full Name *',phoneLbl:'Phone Number',confirmPwLbl:'Confirm Password *',roleLbl:'You are',
+    roleDefault:'Select role',roleStudent:'Student',rolePro:'Professional',roleTeacher:'Teacher',roleOther:'Other',
+    termsLabel:'I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>',regBtn:'Register',
+    hasAccountRow:'Already have an account? <a onclick="showPage(\'page-login\')" style="cursor:pointer;">Login now</a>',
+    fpTitle:'Forgot Password?',fpSub:"Don't worry! We'll help you recover your account",fp1h:'Enter email',fp1p:'Registered email',fp2h:'Get new password',fp2p:'Shown on this screen',fp3h:'Login again',fp3p:'Use the new password',
+    fpH2:'Password Recovery',fpSubRight:'Enter your email to get a new password',fpNote:'Your new password will be shown right here on screen.',fpBtn:'Recover Password',fpBackLink:'← Back to Login',
+    fpSuccessTitle:'Recovery Successful!',fpSuccessDesc:'Your new password is:',fpCopyHint:'Copy it and change your password after logging in!',fpBackBtn:'Login Now',
+    topBar:'Working hours: 8:00–22:00 | Contact: ',smMain:'Main Navigation',smDepts:'Departments',smAbout:'About CEP',smAccount:'Account',smRegCta:'🚀 Register Today',smContact:'📩 Contact Us',
+    heroH1:'Start Your Career<br>Journey Today',heroP:'Explore and develop professional PR & Marketing skills with Career Experience',heroExplore:'🚀 Explore Now',heroLearn:'📖 Learn More',
+    statDepts:'Departments',statStudents:'Students',statTasks:'Practical Tasks',statSat:'Satisfied',featTitle:'Why Choose CEP?',featSub:'The practical learning platform designed for PR & Marketing',
+    f1h:'Practical Tasks',f1p:'Create and practice tasks aligned with real PR & Marketing industry needs',f2h:'Community',f2p:'Connect with professionals and fellow students',f3h:'Track Progress',f3p:'System to monitor and evaluate your learning progress',f4h:'Completion Certificate',f4p:'Earn a certificate upon completing departmental tasks',
+    deptTitle:'Departments',deptSub:'Choose your field — task content will be added soon',prBadge:'PR',prTitle:'Public Relations',prDesc:'Develop public relations, brand building and media management skills.',
+    mktBadge:'Marketing',mktTitle:'Marketing',mktDesc:'Practice Digital Marketing, Content Strategy and Brand Management.',deptBtnSoon:'🔜 Coming Soon',
+    whyTitle:'Why Choose Career Experience?',whyDesc:"CEP isn't just where you learn — it's a platform where you connect with your passion and build your dream career.",
+    why1:'Tasks designed by real-world professionals in PR & Marketing.',why2:'Quality is always our top priority.',why3:'Dynamic student community, supporting each other.',
+    reviewTitle:'Reviews About CEP',reviewSub:'What students say about us',reviewBadge:'Excellent!',
+    r1:'CEP has very practical content. Friendly and easy-to-use interface.',r1role:'PR Student',r2:"CEP's Marketing section is very structured. Tasks are realistic.",r2role:'Marketing Student',r3:"CEP's student community is very enthusiastic. I've learned a lot.",r3role:'PR & Marketing Student',
+    footerAbout:'Professional PR & Marketing skills development platform.',footerLinks:'Quick Links',footerContact:'Contact',footerAddr:'Van Lang University, HCMC',footerHours:'Working Hours',fh1:'Mon–Fri: 8:00–22:00',fh2:'Sat: 8:00–20:00',fh3:'Sun: 9:00–18:00',
+    continueLearning:'▶ Continue Learning',editBtn:'✏️ Edit',editTitle:'Edit Profile',avatarLbl:'Profile Photo',choosePhoto:'Choose Photo',occLbl:'Occupation',locLbl:'Location',webLbl:'Website / LinkedIn',bioLbl:'About Me',saveBtn:'💾 Save',cancelBtn:'Cancel',
+    dobLbl:'Date of Birth',genderLbl:'Gender',fbLbl:'Facebook Link',eduLbl:'Education',expLbl:'Experience',skillsLbl:'Skills',male:'Male',female:'Female',otherGender:'Other',
+    statsTitle:'📊 Learning Stats',statActive:'Active Tasks',statCerts:'Certificates',statHours:'Study Hours',noIntro:'No introduction yet. Add a few lines about yourself!',roleLblMap:{student:'Student',professional:'Professional',teacher:'Teacher',other:'Other'},joinedDate:'Joined',welcomeBack:'Welcome back,',
+    settingsH1:'⚙️ Settings',settingsSub:'Customize your experience',sApp:'🎨 Appearance',sDarkH:'Dark Mode',sDarkP:'Enable to protect your eyes at night',sLangH:'🌐 Language',sLangTitle:'Display Language',sLangDesc:'Applies to the entire app interface',
+    sNotif:'🔔 Notifications',sSysN:'System Notifications',sSysNd:'Get updates about tasks',sEmailN:'Email Notifications',sEmailNd:'Get emails about your progress',
+    sSec:'🔐 Security',sCpH:'Change Password',sCpP:'Update password periodically',sCpBtn:'Change Password',s2fH:'2-Factor Auth',s2fP:'Enhance security',s2fBtn:'Setup',
+    sAccH:'⚠️ Account',sExH:'Export Data',sExP:'Download all your data',sExBtn:'📥 Export',sLoH:'Logout',sLoP:'Logout from this device',sLoBtn:'🚪 Logout',
+    cpH1:'🔑 Change Password',cpSub:'Protect your account with a strong password',cpTipsTitle:'🔐 A strong password should have:',cpT1:'At least 8 characters',cpT2:'Uppercase and lowercase letters',cpT3:'Numbers and special characters',cpT4:'No personal info',
+    cpCurLbl:'Current Password *',cpCurErr:'Current password is incorrect',cpNewLbl:'New Password *',cpNewErr:'Password must be at least 8 characters',cpConLbl:'Confirm New Password *',cpConErr:'Passwords do not match',cpConOk:'✓ Passwords match',cpSaveBtn:'✅ Update',
+    strengthWeak:'⚠️ Weak',strengthMed:'👍 Medium',strengthStrong:'💪 Strong',confirmLogout:'Are you sure you want to logout?',
+    toastLoginOk:'✅ Login successful! Hi {name} 🎉',toastRegOk:'✅ Registration successful! Please login.',toastCpOk:'✅ Password updated!',toastSaveProfile:'✅ Profile updated successfully!',toastExport:'✅ Data exported!',toastComingSoon:'Feature coming soon!',
+    errFill:'❌ Please fill all fields!',errPwdShort:'❌ Password must be at least 8 characters!',errPwdMatch:'❌ Passwords do not match!',errTerms:'❌ You must agree to the terms!',errFpFill:'❌ Please enter email!',errNameEmpty:'❌ Name cannot be empty!',loginRequired:'⚠️ Please login first!',
+    /* AI CHATBOT KEYS */
+    chatHeader: '🤖 CEP AI Assistant', chatInput: 'Type your question here...', chatGreeting: 'Hello! 👋 I am the CEP AI Assistant. How can I help you?'
+  },
+  zh: {
+    navHome:'🏠 首页',navProfile:'👤 个人资料',navSettings:'⚙️ 设置',navChangePwd:'🔑 修改密码',navLogout:'🚪 退出',navLogin:'登录',navRegister:'注册',
+    loginWelcome:'欢迎回来！',loginSubLeft:'探索公关与营销的学习机会',loginH2:'登录',loginSub:'登录以继续您的学习之旅',
+    emailLbl:'电子邮件',pwLbl:'密码',rememberMe:'记住我',forgotLink:'忘记密码？',loginBtn:'登录',orWith:'或使用以下方式登录',
+    noAccountRow:'没有账号？ <a onclick="showPage(\'page-register\')" style="cursor:pointer;">立即注册</a>',
+    regWelcome:'加入我们！',regSubLeft:'开启您的专业公关与营销之旅',regH2:'创建账号',regSub:'免费创建一个账号',
+    b1:'公关实战任务',b2:'营销实战任务',b3:'24/7 支持',b4:'学生社区',
+    fullnameLbl:'全名 *',phoneLbl:'电话号码',confirmPwLbl:'确认密码 *',roleLbl:'您的身份',
+    roleDefault:'选择身份',roleStudent:'学生',rolePro:'在职人员',roleTeacher:'教师',roleOther:'其他',
+    termsLabel:'我同意 <a href="#">条款</a> 和 <a href="#">隐私政策</a>',regBtn:'注册',
+    hasAccountRow:'已有账号？ <a onclick="showPage(\'page-login\')" style="cursor:pointer;">立即登录</a>',
+    fpTitle:'忘记密码？',fpSub:"别担心！我们会帮您恢复账号",fp1h:'输入邮箱',fp1p:'注册邮箱',fp2h:'获取新密码',fp2p:'将显示在屏幕上',fp3h:'重新登录',fp3p:'使用新密码',
+    fpH2:'密码恢复',fpSubRight:'输入邮箱以获取新密码',fpNote:'您的新密码将直接显示在屏幕上。',fpBtn:'恢复密码',fpBackLink:'← 返回登录',
+    fpSuccessTitle:'恢复成功！',fpSuccessDesc:'您的新密码是：',fpCopyHint:'请复制并在登录后修改密码！',fpBackBtn:'立即登录',
+    topBar:'工作时间: 8:00–22:00 | 联系方式: ',smMain:'主导航',smDepts:'专业部门',smAbout:'关于CEP',smAccount:'账号',smRegCta:'🚀 今天就注册',smContact:'📩 联系我们',
+    heroH1:'今天开启<br>您的职业旅程',heroP:'与Career Experience一起探索和发展专业的公关和营销技能',heroExplore:'🚀 立即探索',heroLearn:'📖 了解更多',
+    statDepts:'专业',statStudents:'学员',statTasks:'实战任务',statSat:'满意度',featTitle:'为什么选择CEP？',featSub:'专为公关与营销设计的实战学习平台',
+    f1h:'实战任务',f1p:'创建和练习符合实际行业需求的任务',f2h:'互助社区',f2p:'与行业内的专业人士和同学建立联系',f3h:'进度追踪',f3p:'监控和评估您的学习进度的系统',f4h:'结业证书',f4p:'完成任务后获得证书',
+    deptTitle:'专业',deptSub:'选择您要发展的领域 — 任务内容即将更新',prBadge:'公关',prTitle:'公共关系',prDesc:'培养公共关系、品牌建设和媒体管理技能。',
+    mktBadge:'营销',mktTitle:'市场营销',mktDesc:'实践数字营销、内容策略和品牌管理。',deptBtnSoon:'🔜 敬请期待',
+    whyTitle:'为什么选择Career Experience？',whyDesc:"CEP不仅是您学习的地方，更是您连接激情、建立梦想职业的平台。",
+    why1:'任务由公关与营销行业的资深专家设计。',why2:'质量始终是我们的首要任务。',why3:'充满活力的学生社区，在学习过程中互相支持。',
+    reviewTitle:'关于CEP的评价',reviewSub:'学员们对我们的评价',reviewBadge:'太棒了！',
+    r1:'CEP的内容非常实用，界面友好易用。',r1role:'公关学员',r2:"CEP的市场营销部分非常系统化，任务贴近实际。",r2role:'营销学员',r3:"学员社区非常热情，我学到了很多。",r3role:'公关与营销学员',
+    footerAbout:'面向学生和职场人士的专业公关与营销技能发展平台。',footerLinks:'快速链接',footerContact:'联系方式',footerAddr:'胡志明市文郎大学',footerHours:'工作时间',fh1:'周一至周五: 8:00–22:00',fh2:'周六: 8:00–20:00',fh3:'周日: 9:00–18:00',
+    continueLearning:'▶ 继续学习',editBtn:'✏️ 编辑',editTitle:'编辑资料',avatarLbl:'头像',choosePhoto:'选择照片',occLbl:'职业',locLbl:'地点',webLbl:'网站 / LinkedIn',bioLbl:'关于我',saveBtn:'💾 保存',cancelBtn:'取消',
+    dobLbl:'出生日期',genderLbl:'性别',fbLbl:'Facebook 链接',eduLbl:'教育背景',expLbl:'工作经验',skillsLbl:'技能',male:'男',female:'女',otherGender:'其他',
+    statsTitle:'📊 学习统计',statActive:'进行中的任务',statCerts:'获得的证书',statHours:'学习时长',noIntro:'暂无介绍。写几句关于您自己的话吧！',roleLblMap:{student:'学生',professional:'在职人员',teacher:'教师',other:'其他'},joinedDate:'加入时间',welcomeBack:'欢迎回来，',
+    settingsH1:'⚙️ 设置',settingsSub:'自定义您的体验',sApp:'🎨 外观',sDarkH:'夜间模式',sDarkP:'在夜间保护您的眼睛',sLangH:'🌐 语言',sLangTitle:'显示语言',sLangDesc:'适用于整个应用程序界面',
+    sNotif:'🔔 通知',sSysN:'系统通知',sSysNd:'获取有关任务的更新',sEmailN:'电子邮件通知',sEmailNd:'获取有关您学习进度的邮件',
+    sSec:'🔐 安全',sCpH:'修改密码',sCpP:'定期更新您的密码',sCpBtn:'修改密码',s2fH:'双重身份验证',s2fP:'增强账号安全',s2fBtn:'去设置',
+    sAccH:'⚠️ 账号',sExH:'导出数据',sExP:'下载您的所有数据',sExBtn:'📥 导出',sLoH:'退出',sLoP:'从此设备注销',sLoBtn:'🚪 退出',
+    cpH1:'🔑 修改密码',cpSub:'使用强密码保护您的账号',cpTipsTitle:'🔐 强密码应包含：',cpT1:'至少8个字符',cpT2:'大写和小写字母',cpT3:'数字和特殊字符',cpT4:'不包含个人信息',
+    cpCurLbl:'当前密码 *',cpCurErr:'当前密码不正确',cpNewLbl:'新密码 *',cpNewErr:'密码至少需要8个字符',cpConLbl:'确认新密码 *',cpConErr:'两次密码输入不一致',cpConOk:'✓ 密码一致',cpSaveBtn:'✅ 更新密码',
+    strengthWeak:'⚠️ 弱',strengthMed:'👍 中',strengthStrong:'💪 强',confirmLogout:'您确定要退出吗？',
+    toastLoginOk:'✅ 登录成功！你好 {name} 🎉',toastRegOk:'✅ 注册成功！请登录。',toastCpOk:'✅ 密码更新成功！',toastSaveProfile:'✅ 资料更新成功！',toastExport:'✅ 数据已导出！',toastComingSoon:'功能即将推出！',
+    errFill:'❌ 请填写所有必填项！',errPwdShort:'❌ 密码至少需要8个字符！',errPwdMatch:'❌ 两次密码输入不一致！',errTerms:'❌ 您必须同意条款！',errFpFill:'❌ 请输入邮箱！',errNameEmpty:'❌ 姓名不能为空！',loginRequired:'⚠️ 请先登录！',
+    /* AI CHATBOT KEYS */
+    chatHeader: '🤖 CEP AI 助手', chatInput: '在这里输入您的问题...', chatGreeting: '你好！👋 我是 CEP AI 助手。我能帮您什么？'
+  },
+  ja: {
+    navHome:'🏠 ホーム',navProfile:'👤 プロフィール',navSettings:'⚙️ 設定',navChangePwd:'🔑 パスワード変更',navLogout:'🚪 ログアウト',navLogin:'ログイン',navRegister:'登録',
+    loginWelcome:'お帰りなさい！',loginSubLeft:'PR＆マーケティングの学習機会を探求する',loginH2:'ログイン',loginSub:'学習を続けるにはログインしてください',
+    emailLbl:'メール',pwLbl:'パスワード',rememberMe:'ログイン状態を保持',forgotLink:'パスワードをお忘れですか？',loginBtn:'ログイン',orWith:'または',
+    noAccountRow:'アカウントをお持ちでないですか？ <a onclick="showPage(\'page-register\')" style="cursor:pointer;">今すぐ登録</a>',
+    regWelcome:'参加する！',regSubLeft:'プロのPR＆マーケティングの旅を始めましょう',regH2:'アカウント作成',regSub:'無料でアカウントを作成',
+    b1:'PR実践タスク',b2:'マーケティング実践タスク',b3:'24/7 サポート',b4:'学生コミュニティ',
+    fullnameLbl:'氏名 *',phoneLbl:'電話番号',confirmPwLbl:'パスワードの確認 *',roleLbl:'あなたの役割',
+    roleDefault:'役割を選択',roleStudent:'学生',rolePro:'社会人',roleTeacher:'教師',roleOther:'その他',
+    termsLabel:'<a href="#">利用規約</a>と<a href="#">プライバシーポリシー</a>に同意します',regBtn:'登録',
+    hasAccountRow:'すでにアカウントをお持ちですか？ <a onclick="showPage(\'page-login\')" style="cursor:pointer;">ログイン</a>',
+    fpTitle:'パスワードを忘れた場合',fpSub:"心配しないでください！アカウントの復元をお手伝いします",fp1h:'メールを入力',fp1p:'登録済みのメール',fp2h:'新しいパスワードの取得',fp2p:'画面に表示されます',fp3h:'再ログイン',fp3p:'新しいパスワードを使用',
+    fpH2:'パスワード復元',fpSubRight:'新しいパスワードを取得するにはメールを入力してください',fpNote:'新しいパスワードはこの画面に直接表示されます。',fpBtn:'パスワードを復元',fpBackLink:'← ログインに戻る',
+    fpSuccessTitle:'復元成功！',fpSuccessDesc:'新しいパスワードは：',fpCopyHint:'コピーして、ログイン後に変更してください！',fpBackBtn:'今すぐログイン',
+    topBar:'営業時間: 8:00–22:00 | 連絡先: ',smMain:'メインメニュー',smDepts:'部門',smAbout:'CEPについて',smAccount:'アカウント',smRegCta:'🚀 今すぐ登録',smContact:'📩 お問い合わせ',
+    heroH1:'今日からキャリアの<br>旅を始めよう',heroP:'Career ExperienceでプロのPR＆マーケティングスキルを探求し開発する',heroExplore:'🚀 今すぐ探求',heroLearn:'📖 詳細を見る',
+    statDepts:'部門',statStudents:'学生数',statTasks:'実践タスク',statSat:'満足度',featTitle:'なぜCEPを選ぶのか？',featSub:'PRとマーケティングのために設計された実践的な学習プラットフォーム',
+    f1h:'実践タスク',f1p:'実際の業界ニーズに合わせたタスクを作成し実践する',f2h:'コミュニティ',f2p:'業界の専門家や学生とつながる',f3h:'進捗状況の追跡',f3p:'学習進捗を監視し評価するシステム',f4h:'修了証明書',f4p:'タスク完了後に証明書を取得',
+    deptTitle:'部門',deptSub:'分野を選択 — タスクコンテンツは近日追加予定',prBadge:'PR',prTitle:'パブリックリレーションズ',prDesc:'広報、ブランド構築、メディア管理のスキルを開発。',
+    mktBadge:'マーケティング',mktTitle:'マーケティング',mktDesc:'デジタルマーケティング、コンテンツ戦略、ブランド管理を実践。',deptBtnSoon:'🔜 近日公開',
+    whyTitle:'なぜCareer Experienceなのか？',whyDesc:"CEPは単なる学習場所ではなく、情熱と繋がり、夢のキャリアを築くプラットフォームです。",
+    why1:'PRとマーケティングの専門家によって設計されたタスク。',why2:'品質は常に私たちの最優先事項です。',why3:'学習の過程で互いにサポートし合う学生コミュニティ。',
+    reviewTitle:'CEPのレビュー',reviewSub:'学生の声',reviewBadge:'素晴らしい！',
+    r1:'CEPのコンテンツは非常に実践的で、使いやすいインターフェースです。',r1role:'PR学生',r2:"マーケティングセクションは体系的で、タスクが現実的です。",r2role:'マーケティング学生',r3:"学生コミュニティが非常に熱心で、多くのことを学びました。",r3role:'PR・マーケティング学生',
+    footerAbout:'学生や社会人向けの専門的なPR＆マーケティングスキル開発プラットフォーム。',footerLinks:'リンク集',footerContact:'お問い合わせ',footerAddr:'ホーチミン市バンラン大学',footerHours:'営業時間',fh1:'月–金: 8:00–22:00',fh2:'土: 8:00–20:00',fh3:'日: 9:00–18:00',
+    continueLearning:'▶ 学習を続ける',editBtn:'✏️ 編集',editTitle:'プロフィール編集',avatarLbl:'プロフィール写真',choosePhoto:'写真を選択',occLbl:'職業',locLbl:'場所',webLbl:'ウェブサイト / LinkedIn',bioLbl:'自己紹介',saveBtn:'💾 保存',cancelBtn:'キャンセル',
+    dobLbl:'生年月日',genderLbl:'性別',fbLbl:'Facebook リンク',eduLbl:'学歴',expLbl:'職歴',skillsLbl:'スキル',male:'男性',female:'女性',otherGender:'その他',
+    statsTitle:'📊 学習統計',statActive:'進行中のタスク',statCerts:'取得した証明書',statHours:'学習時間',noIntro:'紹介文がありません。数行追加しましょう！',roleLblMap:{student:'学生',professional:'社会人',teacher:'教師',other:'その他'},joinedDate:'参加日',welcomeBack:'お帰りなさい、',
+    settingsH1:'⚙️ 設定',settingsSub:'エクスペリエンスをカスタマイズ',sApp:'🎨 外観',sDarkH:'ダークモード',sDarkP:'夜間に目を保護するために有効化',sLangH:'🌐 言語',sLangTitle:'表示言語',sLangDesc:'アプリ全体のインターフェースに適用',
+    sNotif:'🔔 通知',sSysN:'システム通知',sSysNd:'タスクの更新を取得',sEmailN:'メール通知',sEmailNd:'学習の進捗に関するメールを取得',
+    sSec:'🔐 セキュリティ',sCpH:'パスワード変更',sCpP:'定期的にパスワードを更新',sCpBtn:'パスワード変更',s2fH:'2段階認証',s2fP:'セキュリティを強化',s2fBtn:'設定',
+    sAccH:'⚠️ アカウント',sExH:'データのエクスポート',sExP:'すべてのデータをダウンロード',sExBtn:'📥 エクスポート',sLoH:'ログアウト',sLoP:'このデバイスからログアウト',sLoBtn:'🚪 ログアウト',
+    cpH1:'🔑 パスワード変更',cpSub:'強力なパスワードでアカウントを保護',cpTipsTitle:'🔐 強力なパスワードの条件：',cpT1:'最低8文字',cpT2:'大文字と小文字',cpT3:'数字と特殊文字',cpT4:'個人情報を含まない',
+    cpCurLbl:'現在のパスワード *',cpCurErr:'パスワードが正しくありません',cpNewLbl:'新しいパスワード *',cpNewErr:'パスワードは8文字以上である必要があります',cpConLbl:'新しいパスワードの確認 *',cpConErr:'パスワードが一致しません',cpConOk:'✓ パスワードが一致しました',cpSaveBtn:'✅ 更新',
+    strengthWeak:'⚠️ 弱い',strengthMed:'👍 普通',strengthStrong:'💪 強い',confirmLogout:'本当にログアウトしますか？',
+    toastLoginOk:'✅ ログイン成功！こんにちは {name} 🎉',toastRegOk:'✅ 登録成功！ログインしてください。',toastCpOk:'✅ パスワードが更新されました！',toastSaveProfile:'✅ プロフィールを更新しました！',toastExport:'✅ データがエクスポートされました！',toastComingSoon:'近日公開！',
+    errFill:'❌ すべてのフィールドに入力してください！',errPwdShort:'❌ パスワードは8文字以上必要です！',errPwdMatch:'❌ パスワードが一致しません！',errTerms:'❌ 利用規約に同意する必要があります！',errFpFill:'❌ メールアドレスを入力してください！',errNameEmpty:'❌ 名前は空にできません！',loginRequired:'⚠️ 先にログインしてください！',
+    /* AI CHATBOT KEYS */
+    chatHeader: '🤖 CEP AI アシスタント', chatInput: 'ここに質問を入力してください...', chatGreeting: 'こんにちは！👋 CEP AIアシスタントです。どのようにお手伝いしましょうか？'
+  },
+  ko: {
+    navHome:'🏠 홈',navProfile:'👤 프로필',navSettings:'⚙️ 설정',navChangePwd:'🔑 비밀번호 변경',navLogout:'🚪 로그아웃',navLogin:'로그인',navRegister:'가입하기',
+    loginWelcome:'환영합니다!',loginSubLeft:'PR 및 마케팅 학습 기회 탐색',loginH2:'로그인',loginSub:'학습을 계속하려면 로그인하세요',
+    emailLbl:'이메일',pwLbl:'비밀번호',rememberMe:'로그인 유지',forgotLink:'비밀번호를 잊으셨나요?',loginBtn:'로그인',orWith:'또는 다음으로 로그인',
+    noAccountRow:'계정이 없으신가요? <a onclick="showPage(\'page-register\')" style="cursor:pointer;">지금 가입하세요</a>',
+    regWelcome:'가입하세요!',regSubLeft:'전문적인 PR 및 마케팅 여정 시작',regH2:'계정 생성',regSub:'무료 계정을 생성하세요',
+    b1:'PR 실무 과제',b2:'마케팅 실무 과제',b3:'24/7 지원',b4:'학생 커뮤니티',
+    fullnameLbl:'이름 *',phoneLbl:'전화번호',confirmPwLbl:'비밀번호 확인 *',roleLbl:'귀하의 역할',
+    roleDefault:'역할 선택',roleStudent:'학생',rolePro:'직장인',roleTeacher:'교사',roleOther:'기타',
+    termsLabel:'본인은 <a href="#">이용약관</a> 및 <a href="#">개인정보 처리방침</a>에 동의합니다.',regBtn:'가입하기',
+    hasAccountRow:'이미 계정이 있으신가요? <a onclick="showPage(\'page-login\')" style="cursor:pointer;">로그인</a>',
+    fpTitle:'비밀번호 찾기',fpSub:"걱정하지 마세요! 계정 복구를 도와드립니다",fp1h:'이메일 입력',fp1p:'등록된 이메일',fp2h:'새 비밀번호 받기',fp2p:'화면에 표시됨',fp3h:'다시 로그인',fp3p:'새 비밀번호 사용',
+    fpH2:'비밀번호 복구',fpSubRight:'새 비밀번호를 받으려면 이메일을 입력하세요',fpNote:'새 비밀번호가 이 화면에 바로 표시됩니다.',fpBtn:'비밀번호 복구',fpBackLink:'← 로그인으로 돌아가기',
+    fpSuccessTitle:'복구 성공!',fpSuccessDesc:'새 비밀번호는 다음과 같습니다:',fpCopyHint:'복사한 후 로그인하여 비밀번호를 변경하세요!',fpBackBtn:'지금 로그인',
+    topBar:'업무 시간: 8:00–22:00 | 연락처: ',smMain:'메인 메뉴',smDepts:'학부',smAbout:'CEP 소개',smAccount:'계정',smRegCta:'🚀 오늘 가입하세요',smContact:'📩 문의하기',
+    heroH1:'오늘 커리어<br>여정을 시작하세요',heroP:'Career Experience와 함께 전문적인 PR 및 마케팅 기술을 개발하세요',heroExplore:'🚀 지금 탐색하기',heroLearn:'📖 더 알아보기',
+    statDepts:'학부',statStudents:'학생',statTasks:'실무 과제',statSat:'만족도',featTitle:'왜 CEP를 선택해야 할까요?',featSub:'PR과 마케팅을 위해 설계된 실무 학습 플랫폼',
+    f1h:'실무 과제',f1p:'실제 업계 요구에 맞춘 과제 생성 및 연습',f2h:'커뮤니티',f2p:'업계 전문가 및 동료 학생들과 연결',f3h:'진척도 추적',f3p:'학습 진행 상황을 모니터링하고 평가하는 시스템',f4h:'수료 인증서',f4p:'과제 완료 후 인증서 획득',
+    deptTitle:'학부',deptSub:'분야를 선택하세요 — 과제 내용이 곧 추가됩니다',prBadge:'PR',prTitle:'홍보(PR)',prDesc:'홍보, 브랜드 구축 및 미디어 관리 기술을 개발합니다.',
+    mktBadge:'마케팅',mktTitle:'마케팅',mktDesc:'디지털 마케팅, 콘텐츠 전략 및 브랜드 관리를 실습합니다.',deptBtnSoon:'🔜 곧 출시됨',
+    whyTitle:'왜 Career Experience인가요?',whyDesc:"CEP는 단순한 학습 장소가 아닙니다. 열정과 연결되고 꿈의 커리어를 쌓는 플랫폼입니다.",
+    why1:'PR 및 마케팅 전문가가 설계한 과제.',why2:'품질은 항상 최우선 순위입니다.',why3:'서로 돕는 활발한 학생 커뮤니티.',
+    reviewTitle:'CEP 리뷰',reviewSub:'학생들의 평가',reviewBadge:'훌륭합니다!',
+    r1:'CEP의 콘텐츠는 매우 실용적이며 인터페이스가 사용하기 쉽습니다.',r1role:'PR 학생',r2:"마케팅 섹션이 매우 체계적이며 과제가 현실적입니다.",r2role:'마케팅 학생',r3:"학생 커뮤니티가 열정적이며 많은 것을 배웠습니다.",r3role:'PR 및 마케팅 학생',
+    footerAbout:'학생 및 전문가를 위한 전문 PR 및 마케팅 기술 개발 플랫폼.',footerLinks:'빠른 링크',footerContact:'연락처',footerAddr:'호치민시 반랑대학교',footerHours:'업무 시간',fh1:'월–금: 8:00–22:00',fh2:'토: 8:00–20:00',fh3:'일: 9:00–18:00',
+    continueLearning:'▶ 계속 학습하기',editBtn:'✏️ 편집',editTitle:'프로필 편집',avatarLbl:'프로필 사진',choosePhoto:'사진 선택',occLbl:'직업',locLbl:'위치',webLbl:'웹사이트 / LinkedIn',bioLbl:'소개',saveBtn:'💾 저장',cancelBtn:'취소',
+    dobLbl:'생년월일',genderLbl:'성별',fbLbl:'페이스북 링크',eduLbl:'학력',expLbl:'경력',skillsLbl:'기술',male:'남성',female:'여성',otherGender:'기타',
+    statsTitle:'📊 학습 통계',statActive:'진행 중인 과제',statCerts:'획득한 인증서',statHours:'학습 시간',noIntro:'소개가 없습니다. 자신에 대해 몇 줄 추가해 보세요!',roleLblMap:{student:'학생',professional:'직장인',teacher:'교사',other:'기타'},joinedDate:'가입일',welcomeBack:'환영합니다,',
+    settingsH1:'⚙️ 설정',settingsSub:'경험 맞춤 설정',sApp:'🎨 외관',sDarkH:'다크 모드',sDarkP:'밤에 눈을 보호하기 위해 활성화',sLangH:'🌐 언어',sLangTitle:'표시 언어',sLangDesc:'앱 전체 인터페이스에 적용됨',
+    sNotif:'🔔 알림',sSysN:'시스템 알림',sSysNd:'과제에 대한 업데이트 받기',sEmailN:'이메일 알림',sEmailNd:'학습 진행 상황에 대한 이메일 받기',
+    sSec:'🔐 보안',sCpH:'비밀번호 변경',sCpP:'주기적으로 비밀번호 업데이트',sCpBtn:'비밀번호 변경',s2fH:'2단계 인증',s2fP:'보안 강화',s2fBtn:'설정',
+    sAccH:'⚠️ 계정',sExH:'데이터 내보내기',sExP:'모든 데이터 다운로드',sExBtn:'📥 내보내기',sLoH:'로그아웃',sLoP:'이 기기에서 로그아웃',sLoBtn:'🚪 로그아웃',
+    cpH1:'🔑 비밀번호 변경',cpSub:'강력한 비밀번호로 계정 보호',cpTipsTitle:'🔐 강력한 비밀번호의 조건:',cpT1:'최소 8자',cpT2:'대문자 및 소문자',cpT3:'숫자 및 특수 문자',cpT4:'개인 정보 미포함',
+    cpCurLbl:'현재 비밀번호 *',cpCurErr:'현재 비밀번호가 일치하지 않습니다',cpNewLbl:'새 비밀번호 *',cpNewErr:'비밀번호는 최소 8자 이상이어야 합니다',cpConLbl:'새 비밀번호 확인 *',cpConErr:'비밀번호가 일치하지 않습니다',cpConOk:'✓ 비밀번호가 일치합니다',cpSaveBtn:'✅ 업데이트',
+    strengthWeak:'⚠️ 약함',strengthMed:'👍 보통',strengthStrong:'💪 강력함',confirmLogout:'정말 로그아웃 하시겠습니까?',
+    toastLoginOk:'✅ 로그인 성공! 안녕하세요 {name} 🎉',toastRegOk:'✅ 가입 성공! 로그인 해주세요.',toastCpOk:'✅ 비밀번호가 변경되었습니다!',toastSaveProfile:'✅ 프로필이 성공적으로 업데이트되었습니다!',toastExport:'✅ 데이터 내보내기 완료!',toastComingSoon:'곧 출시됩니다!',
+    errFill:'❌ 모든 필드를 입력해주세요!',errPwdShort:'❌ 비밀번호는 최소 8자 이상이어야 합니다!',errPwdMatch:'❌ 비밀번호가 일치하지 않습니다!',errTerms:'❌ 약관에 동의해야 합니다!',errFpFill:'❌ 이메일을 입력해주세요!',errNameEmpty:'❌ 이름은 비워둘 수 없습니다!',loginRequired:'⚠️ 먼저 로그인 해주세요!',
+    /* AI CHATBOT KEYS */
+    chatHeader: '🤖 CEP AI 어시스턴트', chatInput: '여기에 질문을 입력하세요...', chatGreeting: '안녕하세요! 👋 CEP AI 어시스턴트입니다. 무엇을 도와드릴까요?'
+  },
+  fr: {
+    navHome:'🏠 Accueil',navProfile:'👤 Profil',navSettings:'⚙️ Paramètres',navChangePwd:'🔑 Changer le mot de passe',navLogout:'🚪 Déconnexion',navLogin:'Connexion',navRegister:'S\'inscrire',
+    loginWelcome:'Bon retour !',loginSubLeft:'Découvrez les opportunités d\'apprentissage en RP et Marketing',loginH2:'Connexion',loginSub:'Connectez-vous pour continuer votre parcours',
+    emailLbl:'E-mail',pwLbl:'Mot de passe',rememberMe:'Se souvenir de moi',forgotLink:'Mot de passe oublié ?',loginBtn:'Connexion',orWith:'Ou connectez-vous avec',
+    noAccountRow:'Pas de compte ? <a onclick="showPage(\'page-register\')" style="cursor:pointer;">Inscrivez-vous</a>',
+    regWelcome:'Rejoignez-nous !',regSubLeft:'Commencez votre parcours professionnel en RP et Marketing',regH2:'Créer un compte',regSub:'Créez un compte gratuit pour commencer',
+    b1:'Tâches pratiques RP',b2:'Tâches pratiques Marketing',b3:'Support 24/7',b4:'Communauté étudiante',
+    fullnameLbl:'Nom complet *',phoneLbl:'Numéro de téléphone',confirmPwLbl:'Confirmer le mot de passe *',roleLbl:'Vous êtes',
+    roleDefault:'Sélectionnez un rôle',roleStudent:'Étudiant',rolePro:'Professionnel',roleTeacher:'Enseignant',roleOther:'Autre',
+    termsLabel:'J\'accepte les <a href="#">Conditions</a> et la <a href="#">Politique de confidentialité</a>',regBtn:'S\'inscrire',
+    hasAccountRow:'Vous avez déjà un compte ? <a onclick="showPage(\'page-login\')" style="cursor:pointer;">Connectez-vous</a>',
+    fpTitle:'Mot de passe oublié ?',fpSub:"Ne vous inquiétez pas ! Nous allons vous aider à récupérer votre compte",fp1h:'Entrez l\'e-mail',fp1p:'E-mail enregistré',fp2h:'Obtenir le nouveau mot de passe',fp2p:'Affiché sur cet écran',fp3h:'Reconnexion',fp3p:'Utilisez le nouveau mot de passe',
+    fpH2:'Récupération du mot de passe',fpSubRight:'Entrez votre e-mail pour obtenir un nouveau mot de passe',fpNote:'Votre nouveau mot de passe sera affiché directement sur cet écran.',fpBtn:'Récupérer le mot de passe',fpBackLink:'← Retour à la connexion',
+    fpSuccessTitle:'Récupération réussie !',fpSuccessDesc:'Votre nouveau mot de passe est :',fpCopyHint:'Copiez-le et changez votre mot de passe après vous être connecté !',fpBackBtn:'Connectez-vous maintenant',
+    topBar:'Heures d\'ouverture : 8h00–22h00 | Contact : ',smMain:'Navigation principale',smDepts:'Départements',smAbout:'À propos de CEP',smAccount:'Compte',smRegCta:'🚀 Inscrivez-vous',smContact:'📩 Contactez-nous',
+    heroH1:'Commencez votre<br>parcours aujourd\'hui',heroP:'Découvrez et développez des compétences professionnelles en RP et Marketing',heroExplore:'🚀 Explorer maintenant',heroLearn:'📖 En savoir plus',
+    statDepts:'Départements',statStudents:'Étudiants',statTasks:'Tâches pratiques',statSat:'Satisfaits',featTitle:'Pourquoi choisir CEP ?',featSub:'La plateforme d\'apprentissage pratique conçue pour les RP et le Marketing',
+    f1h:'Tâches pratiques',f1p:'Créez et pratiquez des tâches adaptées aux besoins réels de l\'industrie',f2h:'Communauté',f2p:'Connectez-vous avec des professionnels et d\'autres étudiants',f3h:'Suivre les progrès',f3p:'Système pour surveiller et évaluer vos progrès',f4h:'Certificat d\'achèvement',f4p:'Obtenez un certificat après avoir terminé les tâches',
+    deptTitle:'Départements',deptSub:'Choisissez votre domaine — le contenu des tâches sera bientôt ajouté',prBadge:'RP',prTitle:'Relations Publiques',prDesc:'Développer des compétences en relations publiques, création de marque et gestion des médias.',
+    mktBadge:'Marketing',mktTitle:'Marketing',mktDesc:'Pratiquez le marketing numérique, la stratégie de contenu et la gestion de marque.',deptBtnSoon:'🔜 Bientôt disponible',
+    whyTitle:'Pourquoi choisir Career Experience ?',whyDesc:"CEP n'est pas seulement un lieu d'apprentissage, c'est une plateforme où vous vous connectez à votre passion et construisez la carrière de vos rêves.",
+    why1:'Tâches conçues par des professionnels des RP et du Marketing.',why2:'La qualité est toujours notre priorité absolue.',why3:'Communauté étudiante dynamique, se soutenant mutuellement.',
+    reviewTitle:'Avis sur CEP',reviewSub:'Ce que nos étudiants disent de nous',reviewBadge:'Excellent !',
+    r1:'CEP propose un contenu très pratique. Interface conviviale et facile à utiliser.',r1role:'Étudiant RP',r2:"La section Marketing est très structurée. Les tâches sont réalistes.",r2role:'Étudiant Marketing',r3:"La communauté étudiante est très enthousiaste. J'ai beaucoup appris.",r3role:'Étudiant RP & Marketing',
+    footerAbout:'Plateforme de développement de compétences professionnelles en RP et Marketing.',footerLinks:'Liens rapides',footerContact:'Contact',footerAddr:'Université Van Lang, HCMC',footerHours:'Heures d\'ouverture',fh1:'Lun–Ven : 8h00–22h00',fh2:'Sam : 8h00–20h00',fh3:'Dim : 9h00–18h00',
+    continueLearning:'▶ Continuer l\'apprentissage',editBtn:'✏️ Éditer',editTitle:'Éditer le profil',avatarLbl:'Photo de profil',choosePhoto:'Choisir une photo',occLbl:'Profession',locLbl:'Emplacement',webLbl:'Site Web / LinkedIn',bioLbl:'À propos de moi',saveBtn:'💾 Enregistrer',cancelBtn:'Annuler',
+    dobLbl:'Date de naissance',genderLbl:'Genre',fbLbl:'Lien Facebook',eduLbl:'Éducation',expLbl:'Expérience',skillsLbl:'Compétences',male:'Homme',female:'Femme',otherGender:'Autre',
+    statsTitle:'📊 Statistiques',statActive:'Tâches actives',statCerts:'Certificats',statHours:'Heures d\'étude',noIntro:'Pas encore d\'introduction. Ajoutez quelques lignes sur vous-même !',roleLblMap:{student:'Étudiant',professional:'Professionnel',teacher:'Enseignant',other:'Autre'},joinedDate:'Inscrit le',welcomeBack:'Bon retour,',
+    settingsH1:'⚙️ Paramètres',settingsSub:'Personnalisez votre expérience',sApp:'🎨 Apparence',sDarkH:'Mode Sombre',sDarkP:'Activer pour protéger vos yeux la nuit',sLangH:'🌐 Langue',sLangTitle:'Langue d\'affichage',sLangDesc:'S\'applique à toute l\'interface de l\'application',
+    sNotif:'🔔 Notifications',sSysN:'Notifications système',sSysNd:'Obtenez des mises à jour sur les tâches',sEmailN:'Notifications par e-mail',sEmailNd:'Recevez des e-mails sur vos progrès',
+    sSec:'🔐 Sécurité',sCpH:'Changer le mot de passe',sCpP:'Mettez à jour le mot de passe périodiquement',sCpBtn:'Changer',s2fH:'Auth. à 2 facteurs',s2fP:'Améliorez la sécurité',s2fBtn:'Configurer',
+    sAccH:'⚠️ Compte',sExH:'Exporter les données',sExP:'Téléchargez toutes vos données',sExBtn:'📥 Exporter',sLoH:'Déconnexion',sLoP:'Déconnectez-vous de cet appareil',sLoBtn:'🚪 Déconnexion',
+    cpH1:'🔑 Changer le mot de passe',cpSub:'Protégez votre compte avec un mot de passe fort',cpTipsTitle:'🔐 Un mot de passe fort doit contenir :',cpT1:'Au moins 8 caractères',cpT2:'Majuscules et minuscules',cpT3:'Chiffres et caractères spéciaux',cpT4:'Aucune information personnelle',
+    cpCurLbl:'Mot de passe actuel *',cpCurErr:'Le mot de passe actuel est incorrect',cpNewLbl:'Nouveau mot de passe *',cpNewErr:'Le mot de passe doit comporter au moins 8 caractères',cpConLbl:'Confirmer le mot de passe *',cpConErr:'Les mots de passe ne correspondent pas',cpConOk:'✓ Les mots de passe correspondent',cpSaveBtn:'✅ Mettre à jour',
+    strengthWeak:'⚠️ Faible',strengthMed:'👍 Moyen',strengthStrong:'💪 Fort',confirmLogout:'Êtes-vous sûr de vouloir vous déconnecter ?',
+    toastLoginOk:'✅ Connexion réussie ! Bonjour {name} 🎉',toastRegOk:'✅ Inscription réussie ! Veuillez vous connecter.',toastCpOk:'✅ Mot de passe mis à jour !',toastSaveProfile:'✅ Profil mis à jour avec succès !',toastExport:'✅ Données exportées !',toastComingSoon:'Fonctionnalité bientôt disponible !',
+    errFill:'❌ Veuillez remplir tous les champs !',errPwdShort:'❌ Le mot de passe doit comporter au moins 8 caractères !',errPwdMatch:'❌ Les mots de passe ne correspondent pas !',errTerms:'❌ Vous devez accepter les conditions !',errFpFill:'❌ Veuillez entrer un e-mail !',errNameEmpty:'❌ Le nom ne peut pas être vide !',loginRequired:'⚠️ Veuillez vous connecter d\'abord !',
+    /* AI CHATBOT KEYS */
+    chatHeader: '🤖 Assistant IA CEP', chatInput: 'Tapez votre question ici...', chatGreeting: 'Bonjour ! 👋 Je suis l\'assistant IA de CEP. Comment puis-je vous aider ?'
+  }
+};
+
+/* ═══════════════════════════════
+   CORE LOGIC & STATE
+═══════════════════════════════ */
+var currentLang = 'vi';
+if(typeof CEP_SETTINGS !== 'undefined') {
+  currentLang = CEP_SETTINGS.load().language || 'vi';
+}
+
+function t(key) {
+  return I18N[currentLang][key] || I18N['vi'][key] || key;
+}
+
+function toast(msgKey, type) {
+  if(typeof CEP_SETTINGS !== 'undefined') {
+    CEP_SETTINGS.showToast(t(msgKey), type);
+  } else {
+    alert(t(msgKey));
+  }
+}
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  if (pageId === 'page-profile' && typeof CEP_AUTH !== 'undefined') {
+    if(!CEP_AUTH.isLoggedIn()) {
+      toast('loginRequired', 'warning');
+      showPage('page-login');
+      return;
+    }
+    renderProfile();
+  }
+}
+
+function scrollToId(id) {
+  var el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior: 'smooth'});
+}
+
+/* Menu Toggle */
+var menuToggle = document.getElementById('menuToggle');
+var slideMenu = document.getElementById('slideMenu');
+var overlay = document.getElementById('overlay');
+var smClose = document.getElementById('smClose');
+
+function openMenu() {
+  slideMenu.classList.add('open');
+  overlay.classList.add('active');
+  menuToggle.classList.add('open');
+}
+function closeMenu() {
+  slideMenu.classList.remove('open');
+  overlay.classList.remove('active');
+  menuToggle.classList.remove('open');
+}
+if(menuToggle) menuToggle.addEventListener('click', function(){ slideMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+if(smClose) smClose.addEventListener('click', closeMenu);
+if(overlay) overlay.addEventListener('click', closeMenu);
+
+/* ═══════════════════════════════
+   AUTH ACTIONS
+═══════════════════════════════ */
+function doRegister() {
+  if(typeof CEP_AUTH === 'undefined') return alert("Lỗi: Không tìm thấy thư viện AUTH!");
+  
+  var name = document.getElementById('regFullname').value.trim();
+  var email = document.getElementById('regEmail').value.trim();
+  var phone = document.getElementById('regPhone').value.trim();
+  var pwd = document.getElementById('regPassword').value;
+  var conf = document.getElementById('regConfirm').value;
+  var role = document.getElementById('regRole').value;
+  var terms = document.getElementById('regTerms').checked;
+
+  if(!name || !email || !pwd || !conf) return toast('errFill', 'error');
+  if(pwd.length < 8) return toast('errPwdShort', 'error');
+  if(pwd !== conf) return toast('errPwdMatch', 'error');
+  if(!terms) return toast('errTerms', 'error');
+
+  var res = CEP_AUTH.register({
+    fullname: name, email: email, phone: phone, password: pwd, role: role
+  });
+
+  if(res.success) {
+    toast('toastRegOk', 'success');
+    showPage('page-login');
+    document.getElementById('loginEmail').value = email; 
+  } else {
+    CEP_SETTINGS.showToast(res.message, 'error');
+  }
+}
+
+function doLogin() {
+  if(typeof CEP_AUTH === 'undefined') return alert("Lỗi: Không tìm thấy thư viện AUTH!");
+
+  var email = document.getElementById('loginEmail').value.trim();
+  var pwd = document.getElementById('loginPassword').value;
+  var rem = document.getElementById('loginRemember').checked;
+
+  if(!email || !pwd) return toast('errFill', 'error');
+
+  var res = CEP_AUTH.login(email, pwd, rem);
+  if(res.success) {
+    var msg = t('toastLoginOk').replace('{name}', res.user.fullname);
+    if(typeof CEP_SETTINGS !== 'undefined') CEP_SETTINGS.showToast(msg, 'success');
+    updateUserUI();
+    showPage('page-home');
+  } else {
+    CEP_SETTINGS.showToast(res.message, 'error');
+  }
+}
+
+function doLogout() {
+  if(typeof CEP_AUTH !== 'undefined') {
+    if(!confirm(t('confirmLogout'))) return;
+    CEP_AUTH.logout(); 
+  }
+}
+
+function hashPasswordBypass(pw) {
+    var hash = 0; var salt = 'CEP_SALT_2024'; var str = pw + salt;
+    for (var i = 0; i < str.length; i++) {
+        var char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash |= 0;
+    }
+    return 'cep_' + Math.abs(hash).toString(36);
+}
+
+function doForgot() {
+  if(typeof CEP_AUTH === 'undefined') return;
+  var email = document.getElementById('forgotEmail').value.trim();
+  if(!email) return toast('errFpFill', 'error');
+
+  var res = CEP_AUTH.forgotPassword(email);
+  if(res.success) {
+    var tempPw = Math.random().toString(36).slice(-8) + 'A1@';
+    
+    var users = JSON.parse(localStorage.getItem('cep_users') || '{}');
+    if(users[email]) {
+      users[email].password = hashPasswordBypass(tempPw);
+      localStorage.setItem('cep_users', JSON.stringify(users));
+    }
+
+    document.getElementById('forgotFormArea').style.display = 'none';
+    document.getElementById('forgotSuccess').style.display = 'block';
+    document.getElementById('newPwDisplay').innerText = tempPw;
+  } else {
+    CEP_SETTINGS.showToast(res.message, 'error');
+  }
+}
+
+/* ═══════════════════════════════
+   PASSWORD STRENGTH & MATCH
+═══════════════════════════════ */
+function togglePw(id, icon) {
+  var input = document.getElementById(id);
+  if(input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
+  else { input.type = 'password'; icon.innerText = '👁️'; }
+}
+
+function checkStrength(val, wrapId) {
+  var wrap = document.getElementById(wrapId);
+  var txt = wrap.querySelector('.strength-txt');
+  if(!val) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  wrap.className = 'strength-wrap';
+  
+  if(val.length < 6) { wrap.classList.add('sw-weak'); txt.innerText = t('strengthWeak'); }
+  else if(val.length < 10 && !/[A-Z]/.test(val)) { wrap.classList.add('sw-medium'); txt.innerText = t('strengthMed'); }
+  else { wrap.classList.add('sw-strong'); txt.innerText = t('strengthStrong'); }
+}
+
+function checkMatch() {
+  var n = document.getElementById('cpNew').value;
+  var c = document.getElementById('cpConfirm').value;
+  var err = document.getElementById('cpConErr');
+  var ok = document.getElementById('cpConOk');
+  if(!c) { err.style.display = 'none'; ok.style.display = 'none'; return; }
+  if(n !== c) { err.style.display = 'block'; ok.style.display = 'none'; }
+  else { err.style.display = 'none'; ok.style.display = 'block'; }
+}
+
+function doChangePw() {
+  var cur = document.getElementById('cpCurrent').value;
+  var n = document.getElementById('cpNew').value;
+  var c = document.getElementById('cpConfirm').value;
+  
+  if(!cur || !n || !c) return toast('errFill', 'error');
+  if(n.length < 8) return toast('errPwdShort', 'error');
+  if(n !== c) return toast('errPwdMatch', 'error');
+  
+  var res = CEP_AUTH.changePassword(cur, n);
+  if(res.success) {
+    toast('toastCpOk', 'success');
+    showPage('page-login');
+  } else {
+    CEP_SETTINGS.showToast(res.message, 'error');
+  }
+}
+
+/* ═══════════════════════════════
+   PROFILE LOGIC
+═══════════════════════════════ */
+function renderProfile() {
+  var user = CEP_AUTH.getCurrentUser();
+  if(!user) return;
+
+  var avHtml = user.avatar ? '<img src="'+user.avatar+'">' : user.fullname.charAt(0).toUpperCase();
+  document.getElementById('profileAv').innerHTML = avHtml;
+  document.getElementById('pName').innerText = user.fullname;
+  
+  var roleMap = I18N[currentLang].roleLblMap || I18N['vi'].roleLblMap;
+  var roleText = roleMap[user.role] || user.role;
+  var meta = '<span>📧 '+user.email+'</span><span>🎭 '+roleText+'</span>';
+  if(user.location) meta += '<span>📍 '+user.location+'</span>';
+  if(user.occupation) meta += '<span>💼 '+user.occupation+'</span>';
+  document.getElementById('pMeta').innerHTML = meta;
+  
+  document.getElementById('pBio').innerText = user.bio || t('noIntro');
+
+  var genderMap = {
+    male: t('male'), female: t('female'), otherGender: t('otherGender')
+  };
+  
+  var detailsHtml = '';
+  if(user.dob) detailsHtml += '<div>📅 <b>' + t('dobLbl') + ':</b> ' + user.dob + '</div>';
+  if(user.gender) detailsHtml += '<div>⚧️ <b>' + t('genderLbl') + ':</b> ' + (genderMap[user.gender] || user.gender) + '</div>';
+  if(user.facebook) detailsHtml += '<div>📘 <b>Facebook:</b> <a href="'+user.facebook+'" target="_blank" style="color:var(--primary)">'+user.facebook+'</a></div>';
+  if(user.education) detailsHtml += '<div>🎓 <b>' + t('eduLbl') + ':</b> ' + user.education + '</div>';
+  if(user.experience) detailsHtml += '<div>💼 <b>' + t('expLbl') + ':</b> ' + user.experience + '</div>';
+  if(user.skills) detailsHtml += '<div>⚡ <b>' + t('skillsLbl') + ':</b> ' + user.skills + '</div>';
+  
+  document.getElementById('pDetails').innerHTML = detailsHtml;
+
+  document.getElementById('avPreview').innerHTML = avHtml;
+  document.getElementById('eFn').value = user.fullname;
+  document.getElementById('ePh').value = user.phone || '';
+  document.getElementById('eOc').value = user.occupation || '';
+  document.getElementById('eLc').value = user.location || '';
+  document.getElementById('eWb').value = user.website || '';
+  document.getElementById('eBi').value = user.bio || '';
+  document.getElementById('eRl').value = user.role || 'student';
+  
+  document.getElementById('eDob').value = user.dob || '';
+  document.getElementById('eGen').value = user.gender || 'male';
+  document.getElementById('eFb').value = user.facebook || '';
+  document.getElementById('eEdu').value = user.education || '';
+  document.getElementById('eExp').value = user.experience || '';
+  document.getElementById('eSkills').value = user.skills || '';
+}
+
+function toggleEdit() {
+  var sec = document.getElementById('editSec');
+  sec.classList.toggle('show');
+}
+
+var tempAvatar = '';
+function handleAv(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      tempAvatar = e.target.result;
+      document.getElementById('avPreview').innerHTML = '<img src="'+tempAvatar+'">';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function saveProfile() {
+  var data = {
+    fullname: document.getElementById('eFn').value.trim(),
+    phone: document.getElementById('ePh').value.trim(),
+    occupation: document.getElementById('eOc').value.trim(),
+    location: document.getElementById('eLc').value.trim(),
+    website: document.getElementById('eWb').value.trim(),
+    bio: document.getElementById('eBi').value.trim(),
+    role: document.getElementById('eRl').value,
+    dob: document.getElementById('eDob').value,
+    gender: document.getElementById('eGen').value,
+    facebook: document.getElementById('eFb').value.trim(),
+    education: document.getElementById('eEdu').value.trim(),
+    experience: document.getElementById('eExp').value.trim(),
+    skills: document.getElementById('eSkills').value.trim()
+  };
+  if(!data.fullname) return toast('errNameEmpty', 'error');
+  if(tempAvatar) data.avatar = tempAvatar;
+
+  var res = CEP_AUTH.updateProfile(data);
+  if(res.success) {
+    toast('toastSaveProfile', 'success');
+    toggleEdit();
+    renderProfile();
+    updateUserUI(); 
+  } else {
+    CEP_SETTINGS.showToast(res.message, 'error');
+  }
+}
+
+/* ═══════════════════════════════
+   UI STATE UPDATE & MISC
+═══════════════════════════════ */
+function updateUserUI() {
+  var authArea = document.getElementById('homeAuthArea');
+  var userBar = document.getElementById('homeUserBar');
+  var smLogin = document.getElementById('smLoginLink');
+  var smReg = document.getElementById('smRegLink');
+  var smProf = document.getElementById('smProfileLink');
+  var smSet = document.getElementById('smSettingsLink');
+
+  if(typeof CEP_AUTH !== 'undefined' && CEP_AUTH.isLoggedIn()) {
+    var user = CEP_AUTH.getCurrentUser();
+    authArea.innerHTML = '<button class="btn-hlogin" onclick="showPage(\'page-profile\')">👤 '+user.fullname.split(' ')[0]+'</button>';
+    userBar.style.display = 'block';
+    document.getElementById('hubName').innerText = t('welcomeBack') + ' ' + user.fullname + '!';
+    document.getElementById('hubSub').innerText = user.email;
+    document.getElementById('hubAv').innerHTML = user.avatar ? '<img src="'+user.avatar+'">' : user.fullname.charAt(0).toUpperCase();
+    
+    if(smLogin) smLogin.style.display = 'none';
+    if(smReg) smReg.style.display = 'none';
+    if(smProf) smProf.style.display = 'flex';
+    if(smSet) smSet.style.display = 'flex';
+  } else {
+    authArea.innerHTML = '<button class="btn-hlogin" onclick="showPage(\'page-login\')" data-i18n="navLogin">Đăng nhập</button><button class="btn-hreg" onclick="showPage(\'page-register\')" data-i18n="navRegister">Đăng ký</button>';
+    userBar.style.display = 'none';
+    if(smLogin) smLogin.style.display = 'flex';
+    if(smReg) smReg.style.display = 'flex';
+    if(smProf) smProf.style.display = 'none';
+    if(smSet) smSet.style.display = 'none';
+  }
+}
+
+function doSearch() {
+  var val = document.getElementById('searchInput').value;
+  if(val) toast('Đang tìm kiếm: ' + val, 'info');
+}
+
+function exportData() {
+  toast('toastExport', 'success');
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(localStorage.getItem('cep_users') || '{}');
+  var dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "cep_data.json");
+  dlAnchorElem.click();
+}
+
+/* ═══════════════════════════════
+   THEME & LANGUAGE SYNC
+═══════════════════════════════ */
+function toggleThemeGlobal() {
+  var isDark = document.body.classList.contains('dark-mode');
+  toggleDark(!isDark);
+}
+
+function toggleDark(isDark) {
+  if(typeof CEP_SETTINGS !== 'undefined') {
+    CEP_SETTINGS.setTheme(isDark ? 'dark' : 'light');
+    updateThemeBtns();
+  }
+}
+
+function updateThemeBtns() {
+  var isDark = document.body.classList.contains('dark-mode');
+  var icon = isDark ? '☀️' : '🌙';
+  ['loginThemeBtn','registerThemeBtn','forgotThemeBtn','homeThemeBtn','profileThemeBtn','settingsThemeBtn','cpThemeBtn'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if(el) {
+      el.innerText = icon;
+      el.onclick = toggleThemeGlobal; 
+    }
+  });
+  var toggle = document.getElementById('darkToggle');
+  if(toggle) toggle.checked = isDark;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  if(typeof CEP_SETTINGS !== 'undefined') {
+    var s = CEP_SETTINGS.load();
+    s.language = lang;
+    CEP_SETTINGS.save(s);
+  }
+  
+  document.querySelectorAll('.lang-opt').forEach(function(el){ el.classList.remove('active'); });
+  var activeOpt = document.querySelector('.lang-opt[data-lang="'+lang+'"]');
+  if(activeOpt) activeOpt.classList.add('active');
+  
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if(I18N[lang] && I18N[lang][key]) {
+      if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = I18N[lang][key];
+      } else if (el.tagName === 'OPTION') {
+        el.innerText = I18N[lang][key];
+      } else {
+        el.innerText = I18N[lang][key];
+      }
+    }
+  });
+  
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-html');
+    if(I18N[lang] && I18N[lang][key]) el.innerHTML = I18N[lang][key];
+  });
+  
+  updateUserUI(); 
+  if(document.getElementById('page-profile').classList.contains('active')) renderProfile();
+}
+
+/* ═══════════════════════════════
+   AI CHATBOT LOGIC (ĐỒNG BỘ ĐA NGÔN NGỮ)
+═══════════════════════════════ */
+function toggleChat() {
+    var panel = document.getElementById('cep-chatbot-panel');
+    panel.classList.toggle('show');
+    if(panel.classList.contains('show')) {
+        document.getElementById('chatInput').focus();
+    }
+}
+
+function handleChatKey(e) {
+    if(e.key === 'Enter') sendChatMessage();
+}
+
+function sendChatMessage() {
+    var input = document.getElementById('chatInput');
+    var text = input.value.trim();
+    if(!text) return;
+    
+    appendMsg(text, 'user');
+    input.value = '';
+    
+    setTimeout(function() {
+        var reply = getBotResponse(text);
+        appendMsg(reply, 'bot');
+    }, 600);
+}
+
+function appendMsg(text, sender) {
+    var body = document.getElementById('chatBody');
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg ' + (sender === 'user' ? 'user-msg' : 'bot-msg');
+    msgDiv.innerText = text;
+    body.appendChild(msgDiv);
+    body.scrollTop = body.scrollHeight; 
+}
+
+function getBotResponse(text) {
+    text = text.toLowerCase().trim();
+    var lang = currentLang || 'vi';
+
+    // 1. NHẬN DIỆN TỪ KHÓA BẰNG NHIỀU NGÔN NGỮ
+    var isHello = text.includes('chào') || text.includes('hi') || text.includes('hello') || text.includes('bonjour') || text.includes('こんにちは') || text.includes('你好') || text.includes('안녕');
+    var isWho = text.includes('bạn là ai') || text.includes('tên gì') || text.includes('who are you') || text.includes('bot') || text.includes('ai tạo ra') || text.includes('who created');
+    var isThanks = text.includes('cảm ơn') || text.includes('thank') || text.includes('merci') || text.includes('ありがとう') || text.includes('谢谢') || text.includes('고마워');
+    var isBye = text.includes('tạm biệt') || text.includes('bye') || text.includes('au revoir') || text.includes('さようなら') || text.includes('再见') || text.includes('안녕히');
+    var isFee = text.includes('phí') || text.includes('tiền') || text.includes('fee') || text.includes('price') || text.includes('free') || text.includes('miễn phí') || text.includes('gratuit');
+    var isCert = text.includes('chứng chỉ') || text.includes('bằng') || text.includes('cert') || text.includes('diploma');
+    var isTarget = text.includes('ai có thể') || text.includes('đối tượng') || text.includes('student') || text.includes('ai học') || text.includes('who can');
+    var isPR = text.includes('pr') || text.includes('quan hệ') || text.includes('public relation');
+    var isMkt = text.includes('marketing') || text.includes('digital');
+    var isReg = text.includes('đăng ký') || text.includes('tạo tài khoản') || text.includes('register') || text.includes('sign up') || text.includes('create account');
+    var isPass = text.includes('quên') || text.includes('pass') || text.includes('mật khẩu') || text.includes('forgot') || text.includes('mot de passe');
+    var isContact = text.includes('liên hệ') || text.includes('số điện thoại') || text.includes('hotline') || text.includes('email') || text.includes('contact');
+
+    // 2. KHO CÂU TRẢ LỜI ĐA NGÔN NGỮ CỦA BOT
+    var responses = {
+        vi: {
+            hello: "Chào bạn! 👋 Mình là Trợ lý AI của CEP. Mình có thể giúp gì cho bạn?",
+            who: "Mình là Trợ lý AI độc quyền của CEP. Mình ở đây 24/7 để hỗ trợ bạn! 🤖",
+            thanks: "Không có chi! Hỗ trợ bạn là niềm vui của mình. ❤️",
+            bye: "Tạm biệt bạn nhé! Chúc bạn học tập hiệu quả cùng CEP. 👋",
+            fee: "Hiện tại tạo tài khoản trên CEP là hoàn toàn Miễn phí nhé! Bạn cứ tự nhiên đăng ký.",
+            cert: "Sau khi hoàn thành bài tập, bạn sẽ nhận được Chứng nhận từ CEP. Rất xịn xò cho CV! 🎓",
+            target: "CEP dành cho tất cả mọi người, từ sinh viên mới tìm hiểu đến người đi làm muốn nâng cao tay nghề!",
+            pr: "Nền tảng PR tại CEP giúp bạn phát triển kỹ năng quan hệ công chúng, xử lý khủng hoảng và xây dựng thương hiệu.",
+            mkt: "Mảng Marketing tập trung vào Digital Marketing và Brand Management. Rất sát thực tế doanh nghiệp 📈!",
+            reg: "Bạn có thể nhấn nút 'Đăng ký' ở góc màn hình hoặc trong Menu để tạo tài khoản nhé.",
+            pass: "Nếu quên mật khẩu, hãy vào trang Đăng nhập và bấm 'Quên mật khẩu' để nhận lại ngay trên màn hình.",
+            contact: "Bạn có thể liên hệ CEP qua:\n📞 Hotline: 0356348552\n✉️ Email: ntanphuc2909@gmail.com\n📍 Địa chỉ: ĐH Văn Lang, TP. HCM.",
+            fallbacks: [
+                "Xin lỗi, mình chưa hiểu ý bạn lắm 😅. Bạn có thể hỏi về PR, Marketing, Đăng ký hoặc Chứng chỉ nhé!",
+                "Chà, câu này khó quá! Mình vẫn đang học hỏi. Bạn có muốn tìm hiểu lộ trình Marketing không?",
+                "Bạn dùng các từ khóa như 'Đăng ký', 'Học phí', 'Liên hệ' để mình hỗ trợ tốt hơn nha 🤔."
+            ]
+        },
+        en: {
+            hello: "Hello! 👋 I'm the CEP AI Assistant. How can I help you?",
+            who: "I'm the exclusive AI Assistant of CEP, here 24/7 to support you! 🤖",
+            thanks: "You're welcome! It's my pleasure to help. ❤️",
+            bye: "Goodbye! Have a great learning experience with CEP. 👋",
+            fee: "Creating an account on CEP is currently completely Free! Feel free to join us.",
+            cert: "After completing tasks, you'll receive a CEP Certificate. Great for your CV! 🎓",
+            target: "CEP is for everyone, from students to working professionals wanting to upgrade their skills!",
+            pr: "The PR platform at CEP helps you develop public relations, crisis management, and branding skills.",
+            mkt: "The Marketing section focuses on Digital Marketing and Brand Management. Highly practical 📈!",
+            reg: "You can click the 'Register' button on the screen or in the Menu to create an account.",
+            pass: "If you forgot your password, go to the Login page and click 'Forgot password' to get a new one instantly.",
+            contact: "Contact CEP via:\n📞 Hotline: 0356348552\n✉️ Email: ntanphuc2909@gmail.com\n📍 Address: Van Lang Univ, HCMC.",
+            fallbacks: [
+                "Sorry, I didn't quite get that 😅. You can ask about PR, Marketing, Registration, or Certificates!",
+                "That's a tough one! I'm still learning. Want to explore our Marketing path?",
+                "Try using keywords like 'Register', 'Fee', 'PR' so I can assist you better 🤔."
+            ]
+        },
+        zh: {
+            hello: "你好！👋 我是 CEP AI 助手。我能帮您什么？",
+            who: "我是 CEP 专属的 AI 助手，24/7 为您服务！🤖",
+            thanks: "不客气！很高兴能帮到您。❤️",
+            bye: "再见！祝您在 CEP 学习愉快。👋",
+            fee: "目前在 CEP 创建账户是完全免费的！欢迎加入我们。",
+            cert: "完成任务后，您将获得 CEP 证书。对您的简历很有帮助！🎓",
+            target: "CEP 适合所有人，无论是学生还是想提升技能的职场人士！",
+            pr: "CEP 的公关平台帮助您培养公共关系、危机管理和品牌建设技能。",
+            mkt: "营销部分专注于数字营销和品牌管理。非常实用 📈！",
+            reg: "您可以点击屏幕上或菜单中的“注册”按钮来创建账户。",
+            pass: "如果您忘记了密码，请进入登录页面并点击“忘记密码”以立即获取新密码。",
+            contact: "联系 CEP：\n📞 热线：0356348552\n✉️ 邮箱：ntanphuc2909@gmail.com\n📍 地址：胡志明市文郎大学。",
+            fallbacks: [
+                "抱歉，我没太明白 😅。您可以询问关于公关、营销、注册或证书的问题！",
+                "这有点难！我还在学习中。想了解我们的营销路线吗？",
+                "请尝试使用“注册”、“费用”、“公关”等关键词，以便我更好地协助您 🤔。"
+            ]
+        },
+        ja: {
+            hello: "こんにちは！👋 CEP AIアシスタントです。どのようにお手伝いしましょうか？",
+            who: "私はCEP専用のAIアシスタントです。24時間年中無休でサポートします！🤖",
+            thanks: "どういたしまして！お役に立てて嬉しいです。❤️",
+            bye: "さようなら！CEPで素晴らしい学習体験を。👋",
+            fee: "現在、CEPでのアカウント作成は完全無料です！お気軽にご参加ください。",
+            cert: "タスクを完了すると、CEP証明書を受け取ることができます。履歴書に最適です！🎓",
+            target: "CEPは学生からスキルアップを目指す社会人まで、すべての人に向けたプラットフォームです！",
+            pr: "CEPのPRプラットフォームは、広報、危機管理、ブランディングのスキルを磨くのに役立ちます。",
+            mkt: "マーケティング部門はデジタルマーケティングとブランド管理に焦点を当てています。非常に実践的です 📈！",
+            reg: "画面またはメニューの「登録」ボタンをクリックしてアカウントを作成できます。",
+            pass: "パスワードを忘れた場合は、ログインページで「パスワードをお忘れですか」をクリックして新しいパスワードを取得してください。",
+            contact: "CEPへのお問い合わせ：\n📞 ホットライン：0356348552\n✉️ メール：ntanphuc2909@gmail.com\n📍 住所：ホーチミン市バンラン大学",
+            fallbacks: [
+                "すみません、よく分かりませんでした 😅。PR、マーケティング、登録、証明書について質問できます！",
+                "それは難しい質問ですね！まだ学習中です。マーケティングのコースについて知りたいですか？",
+                "「登録」「料金」「PR」などのキーワードを試してください 🤔。"
+            ]
+        },
+        ko: {
+            hello: "안녕하세요! 👋 CEP AI 어시스턴트입니다. 무엇을 도와드릴까요?",
+            who: "저는 24시간 연중무휴로 여러분을 지원하는 CEP 전용 AI 어시스턴트입니다! 🤖",
+            thanks: "천만에요! 도움이 되어 기쁩니다. ❤️",
+            bye: "안녕히 가세요! CEP와 함께 즐거운 학습 되세요. 👋",
+            fee: "현재 CEP 계정 생성은 완전 무료입니다! 자유롭게 가입하세요.",
+            cert: "과제를 완료하면 CEP 수료증을 받게 됩니다. 이력서에 좋습니다! 🎓",
+            target: "CEP는 학생부터 기술을 향상시키고자 하는 직장인까지 모든 사람을 위한 것입니다!",
+            pr: "CEP의 PR 플랫폼은 홍보, 위기 관리 및 브랜딩 기술을 개발하는 데 도움이 됩니다.",
+            mkt: "마케팅 섹션은 디지털 마케팅 및 브랜드 관리에 중점을 둡니다. 매우 실용적입니다 📈!",
+            reg: "화면이나 메뉴에서 '가입하기' 버튼을 클릭하여 계정을 만들 수 있습니다.",
+            pass: "비밀번호를 잊은 경우 로그인 페이지로 이동하여 '비밀번호 찾기'를 클릭하여 즉시 새 비밀번호를 받으세요.",
+            contact: "CEP 연락처:\n📞 핫라인: 0356348552\n✉️ 이메일: ntanphuc2909@gmail.com\n📍 주소: 호치민시 반랑대학교.",
+            fallbacks: [
+                "죄송합니다. 잘 이해하지 못했습니다 😅. PR, 마케팅, 등록 또는 수료증에 대해 질문할 수 있습니다!",
+                "어려운 질문이네요! 저는 아직 배우고 있습니다. 마케팅 과정에 대해 알아보시겠습니까?",
+                "더 나은 지원을 위해 '등록', '요금', 'PR'과 같은 키워드를 사용해 보세요 🤔."
+            ]
+        },
+        fr: {
+            hello: "Bonjour ! 👋 Je suis l'assistant IA de CEP. Comment puis-je vous aider ?",
+            who: "Je suis l'assistant IA exclusif de CEP, là 24/7 pour vous soutenir ! 🤖",
+            thanks: "De rien ! C'est un plaisir de vous aider. ❤️",
+            bye: "Au revoir ! Bonne expérience d'apprentissage avec CEP. 👋",
+            fee: "La création d'un compte sur CEP est actuellement totalement gratuite ! N'hésitez pas à nous rejoindre.",
+            cert: "Après avoir terminé les tâches, vous recevrez un certificat CEP. Idéal pour votre CV ! 🎓",
+            target: "CEP est pour tout le monde, des étudiants aux professionnels voulant améliorer leurs compétences !",
+            pr: "La plateforme RP de CEP vous aide à développer des compétences en relations publiques, gestion de crise et création de marque.",
+            mkt: "La section Marketing se concentre sur le marketing numérique et la gestion de marque. Très pratique 📈 !",
+            reg: "Vous pouvez cliquer sur le bouton 'S'inscrire' à l'écran ou dans le Menu pour créer un compte.",
+            pass: "Si vous avez oublié votre mot de passe, allez sur la page de connexion et cliquez sur 'Mot de passe oublié' pour en obtenir un nouveau instantanément.",
+            contact: "Contactez CEP via :\n📞 Hotline : 0356348552\n✉️ E-mail : ntanphuc2909@gmail.com\n📍 Adresse : Université Van Lang, HCMC.",
+            fallbacks: [
+                "Désolé, je n'ai pas bien compris 😅. Vous pouvez poser des questions sur les RP, le marketing, l'inscription ou les certificats !",
+                "C'est une question difficile ! J'apprends encore. Voulez-vous explorer notre parcours Marketing ?",
+                "Essayez d'utiliser des mots-clés tels que 'Inscription', 'Frais', 'RP' pour que je puisse mieux vous aider 🤔."
+            ]
+        }
+    };
+
+    var res = responses[lang] || responses['vi']; 
+
+    if (isHello) return res.hello;
+    if (isWho) return res.who;
+    if (isThanks) return res.thanks;
+    if (isBye) return res.bye;
+    if (isFee) return res.fee;
+    if (isCert) return res.cert;
+    if (isTarget) return res.target;
+    if (isPR) return res.pr;
+    if (isMkt) return res.mkt;
+    if (isReg) return res.reg;
+    if (isPass) return res.pass;
+    if (isContact) return res.contact;
+
+    var fallbacks = res.fallbacks;
+    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+}
+
+/* INIT & AUTO LOGIN */
+document.addEventListener('DOMContentLoaded', function() {
+  updateUserUI();
+  updateThemeBtns();
+  setLang(currentLang);
+  
+  if(typeof CEP_AUTH !== 'undefined' && CEP_AUTH.isLoggedIn()) {
+    showPage('page-home');
+  } else {
+    showPage('page-login');
+  }
+});
+</script>
+</body>
+</html>
