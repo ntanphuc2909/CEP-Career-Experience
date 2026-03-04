@@ -1,10 +1,9 @@
 /**
  * CEP Authentication & User Data Storage - FIREBASE CLOUD VERSION
- * Đã được tích hợp cơ sở dữ liệu Firebase.
+ * Đã tích hợp Đăng nhập bằng Google & Facebook
  */
 
 var CEP_AUTH = (function () {
-    // 1. CẤU HÌNH FIREBASE CỦA BẠN
     const firebaseConfig = {
         apiKey: "AIzaSyBNrB6G8FIoZaHxjyf1ki9sshPKbobH0rU",
         authDomain: "cep-career-web.firebaseapp.com",
@@ -15,29 +14,24 @@ var CEP_AUTH = (function () {
         measurementId: "G-P209XZ5FDK"
     };
 
-    // Khởi tạo Firebase nếu chưa có
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
 
     const auth = firebase.auth();
     const db = firebase.firestore();
-
     let currentUserData = null;
 
-    // 2. LẮNG NGHE TRẠNG THÁI ĐĂNG NHẬP
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             const doc = await db.collection('users').doc(user.uid).get();
             if (doc.exists) {
                 currentUserData = doc.data();
             }
-            // Tự động cập nhật giao diện
             if(typeof updateUserUI === 'function') updateUserUI();
             if(typeof renderProfile === 'function' && document.getElementById('page-profile') && document.getElementById('page-profile').classList.contains('active')) {
                 renderProfile();
             }
-            // Nếu đang ở trang login/register thì tự động chuyển về trang chủ
             if(document.getElementById('page-login') && document.getElementById('page-login').classList.contains('active') || document.getElementById('page-register') && document.getElementById('page-register').classList.contains('active')){
                 if(typeof showPage === 'function') showPage('page-home');
             }
@@ -47,38 +41,20 @@ var CEP_AUTH = (function () {
         }
     });
 
-    // 3. CÁC HÀM XỬ LÝ (FIREBASE CLOUD)
-    function isLoggedIn() {
-        return auth.currentUser !== null;
-    }
-
-    function getCurrentUser() {
-        return currentUserData;
-    }
+    function isLoggedIn() { return auth.currentUser !== null; }
+    function getCurrentUser() { return currentUserData; }
 
     async function register(data) {
         try {
-            // Tạo tài khoản Auth
             const userCred = await auth.createUserWithEmailAndPassword(data.email, data.password);
             const user = userCred.user;
-            
-            // Lưu thông tin vào CSDL Firestore
             const userData = {
-                uid: user.uid,
-                fullname: data.fullname,
-                email: data.email,
-                phone: data.phone || '',
-                role: data.role || 'student',
-                avatar: data.avatar || '',
-                bio: data.bio || '',
-                location: data.location || '',
-                website: data.website || '',
-                occupation: data.occupation || '',
+                uid: user.uid, fullname: data.fullname, email: data.email, phone: data.phone || '',
+                role: data.role || 'student', avatar: data.avatar || '', bio: data.bio || '',
+                location: data.location || '', website: data.website || '', occupation: data.occupation || '',
                 dob: '', gender: 'male', facebook: '', education: '', experience: '', skills: '',
-                createdAt: Date.now(),
-                updatedAt: Date.now()
+                createdAt: Date.now(), updatedAt: Date.now()
             };
-
             await db.collection('users').doc(user.uid).set(userData);
             return { success: true };
         } catch (error) {
@@ -93,12 +69,59 @@ var CEP_AUTH = (function () {
         try {
             const persistence = remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
             await auth.setPersistence(persistence);
-            await auth.signInWithEmailAndPassword(email, password);
-            return { success: true, user: { fullname: "Bạn" } }; 
+            const userCred = await auth.signInWithEmailAndPassword(email, password);
+            const doc = await db.collection('users').doc(userCred.user.uid).get();
+            if (doc.exists) currentUserData = doc.data();
+            return { success: true, user: currentUserData || { fullname: "Bạn" } }; 
         } catch (error) {
             return { success: false, message: 'Sai email hoặc mật khẩu!' };
         }
     }
+
+    // ====== XỬ LÝ ĐĂNG NHẬP GOOGLE / FACEBOOK ======
+    async function handleSocialLoginSuccess(user) {
+        const doc = await db.collection('users').doc(user.uid).get();
+        if (!doc.exists) {
+            // Lần đầu đăng nhập: tự động tạo hồ sơ bằng tên và ảnh của Google
+            const userData = {
+                uid: user.uid,
+                fullname: user.displayName || 'Người dùng',
+                email: user.email || '',
+                phone: user.phoneNumber || '',
+                role: 'student',
+                avatar: user.photoURL || '',
+                bio: '', location: '', website: '', occupation: '',
+                dob: '', gender: 'male', facebook: '', education: '', experience: '', skills: '',
+                createdAt: Date.now(), updatedAt: Date.now()
+            };
+            await db.collection('users').doc(user.uid).set(userData);
+            currentUserData = userData;
+        } else {
+            currentUserData = doc.data();
+        }
+        return { success: true, user: currentUserData };
+    }
+
+    async function loginWithGoogle() {
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            const result = await auth.signInWithPopup(provider);
+            return await handleSocialLoginSuccess(result.user);
+        } catch (error) {
+            return { success: false, message: 'Đăng nhập Google bị hủy hoặc lỗi.' };
+        }
+    }
+
+    async function loginWithFacebook() {
+        try {
+            const provider = new firebase.auth.FacebookAuthProvider();
+            const result = await auth.signInWithPopup(provider);
+            return await handleSocialLoginSuccess(result.user);
+        } catch (error) {
+            return { success: false, message: 'Đăng nhập Facebook thất bại (Cần cấu hình App ID)!' };
+        }
+    }
+    // ====================================================
 
     async function logout() {
         await auth.signOut();
@@ -110,11 +133,8 @@ var CEP_AUTH = (function () {
         try {
             const allowed = ['fullname','phone','bio','location','website','occupation','avatar','role','dob','gender','facebook','education','experience','skills'];
             const updateData = {};
-            allowed.forEach(key => {
-                if (data[key] !== undefined) updateData[key] = data[key];
-            });
+            allowed.forEach(key => { if (data[key] !== undefined) updateData[key] = data[key]; });
             updateData.updatedAt = Date.now();
-
             await db.collection('users').doc(auth.currentUser.uid).update(updateData);
             currentUserData = { ...currentUserData, ...updateData };
             return { success: true, user: currentUserData };
@@ -125,11 +145,9 @@ var CEP_AUTH = (function () {
 
     async function changePassword(currentPassword, newPassword) {
         try {
-            // Xác thực lại trước khi đổi pass để bảo mật
             const user = auth.currentUser;
             const cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
             await user.reauthenticateWithCredential(cred);
-            
             await user.updatePassword(newPassword);
             return { success: true };
         } catch (error) {
@@ -149,23 +167,16 @@ var CEP_AUTH = (function () {
     }
 
     function requireAuth() {
-        if (!isLoggedIn()) {
-            window.location.href = 'login.html';
-            return false;
-        }
+        if (!isLoggedIn()) { window.location.href = 'login.html'; return false; }
         return true;
     }
 
-    // Export các hàm để gọi từ bên ngoài
     return {
-        isLoggedIn      : isLoggedIn,
-        getCurrentUser  : getCurrentUser,
-        register        : register,
-        login           : login,
-        logout          : logout,
-        updateProfile   : updateProfile,
-        changePassword  : changePassword,
-        forgotPassword  : forgotPassword,
-        requireAuth     : requireAuth
+        isLoggedIn: isLoggedIn, getCurrentUser: getCurrentUser,
+        register: register, login: login, logout: logout,
+        updateProfile: updateProfile, changePassword: changePassword,
+        forgotPassword: forgotPassword, requireAuth: requireAuth,
+        loginWithGoogle: loginWithGoogle,
+        loginWithFacebook: loginWithFacebook
     };
 })();
