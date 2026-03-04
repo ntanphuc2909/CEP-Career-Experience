@@ -1,175 +1,151 @@
 /**
- * CEP Authentication & User Data Storage
- * Lưu toàn bộ dữ liệu người dùng vào localStorage
- * Đặt file này cùng thư mục với các file HTML
+ * CEP Authentication & User Data Storage - FIREBASE CLOUD VERSION
+ * Đã được tích hợp cơ sở dữ liệu Firebase.
  */
 
 var CEP_AUTH = (function () {
-    var USERS_KEY   = 'cep_users';
-    var SESSION_KEY = 'cep_session';
+    // 1. CẤU HÌNH FIREBASE CỦA BẠN
+    const firebaseConfig = {
+        apiKey: "AIzaSyBNrB6G8FIoZaHxjyf1ki9sshPKbobH0rU",
+        authDomain: "cep-career-web.firebaseapp.com",
+        projectId: "cep-career-web",
+        storageBucket: "cep-career-web.firebasestorage.app",
+        messagingSenderId: "850922923304",
+        appId: "1:850922923304:web:c58846ecd299f7f6621c1d",
+        measurementId: "G-P209XZ5FDK"
+    };
 
-    /* ── Helpers ── */
-    function getUsers() {
-        try {
-            var raw = localStorage.getItem(USERS_KEY);
-            return raw ? JSON.parse(raw) : {};
-        } catch (e) { return {}; }
+    // Khởi tạo Firebase nếu chưa có
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
     }
 
-    function saveUsers(users) {
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    function getSession() {
-        try {
-            // Kiểm tra sessionStorage trước (sẽ mất khi đóng tab), sau đó kiểm tra localStorage (nếu có Ghi nhớ đăng nhập)
-            var s = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
-            return s ? JSON.parse(s) : null;
-        } catch (e) { return null; }
-    }
+    let currentUserData = null;
 
-    function saveSession(email, remember) {
-        var session = { email: email, loginAt: Date.now() };
-        // Luôn lưu vào sessionStorage
-        sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-        // Nếu tick Ghi nhớ đăng nhập thì lưu cả vào localStorage
-        if (remember) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    // 2. LẮNG NGHE TRẠNG THÁI ĐĂNG NHẬP
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            const doc = await db.collection('users').doc(user.uid).get();
+            if (doc.exists) {
+                currentUserData = doc.data();
+            }
+            // Tự động cập nhật giao diện
+            if(typeof updateUserUI === 'function') updateUserUI();
+            if(typeof renderProfile === 'function' && document.getElementById('page-profile') && document.getElementById('page-profile').classList.contains('active')) {
+                renderProfile();
+            }
+            // Nếu đang ở trang login/register thì tự động chuyển về trang chủ
+            if(document.getElementById('page-login') && document.getElementById('page-login').classList.contains('active') || document.getElementById('page-register') && document.getElementById('page-register').classList.contains('active')){
+                if(typeof showPage === 'function') showPage('page-home');
+            }
+        } else {
+            currentUserData = null;
+            if(typeof updateUserUI === 'function') updateUserUI();
         }
-    }
+    });
 
-    function clearSession() {
-        sessionStorage.removeItem(SESSION_KEY);
-        localStorage.removeItem(SESSION_KEY);
-    }
-
-    function hashPassword(pw) {
-        // Băm mật khẩu cơ bản
-        var hash = 0;
-        var salt = 'CEP_SALT_2024';
-        var str  = pw + salt;
-        for (var i = 0; i < str.length; i++) {
-            var char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash |= 0;
-        }
-        return 'cep_' + Math.abs(hash).toString(36);
-    }
-
-    /* ── Public API ── */
-
+    // 3. CÁC HÀM XỬ LÝ (FIREBASE CLOUD)
     function isLoggedIn() {
-        return getSession() !== null;
+        return auth.currentUser !== null;
     }
 
     function getCurrentUser() {
-        var session = getSession();
-        if (!session) return null;
-        var users = getUsers();
-        return users[session.email] || null;
+        return currentUserData;
     }
 
-    function register(data) {
-        if (!data.fullname || !data.email || !data.password) {
-            return { success: false, message: 'Vui lòng điền đầy đủ thông tin!' };
+    async function register(data) {
+        try {
+            // Tạo tài khoản Auth
+            const userCred = await auth.createUserWithEmailAndPassword(data.email, data.password);
+            const user = userCred.user;
+            
+            // Lưu thông tin vào CSDL Firestore
+            const userData = {
+                uid: user.uid,
+                fullname: data.fullname,
+                email: data.email,
+                phone: data.phone || '',
+                role: data.role || 'student',
+                avatar: data.avatar || '',
+                bio: data.bio || '',
+                location: data.location || '',
+                website: data.website || '',
+                occupation: data.occupation || '',
+                dob: '', gender: 'male', facebook: '', education: '', experience: '', skills: '',
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            };
+
+            await db.collection('users').doc(user.uid).set(userData);
+            return { success: true };
+        } catch (error) {
+            let msg = 'Lỗi đăng ký!';
+            if (error.code === 'auth/email-already-in-use') msg = 'Email này đã được đăng ký!';
+            if (error.code === 'auth/weak-password') msg = 'Mật khẩu quá yếu (cần tối thiểu 6 ký tự)!';
+            return { success: false, message: msg };
         }
-        var users = getUsers();
-        if (users[data.email]) {
-            return { success: false, message: 'Email này đã được đăng ký!' };
+    }
+
+    async function login(email, password, remember) {
+        try {
+            const persistence = remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+            await auth.setPersistence(persistence);
+            await auth.signInWithEmailAndPassword(email, password);
+            return { success: true, user: { fullname: "Bạn" } }; 
+        } catch (error) {
+            return { success: false, message: 'Sai email hoặc mật khẩu!' };
         }
-        
-        // Khởi tạo các trường dữ liệu mặc định (Bao gồm các trường Profile mới)
-        users[data.email] = {
-            fullname   : data.fullname,
-            email      : data.email,
-            phone      : data.phone      || '',
-            role       : data.role       || 'student',
-            password   : hashPassword(data.password),
-            avatar     : data.avatar     || '',
-            bio        : data.bio        || '',
-            location   : data.location   || '',
-            website    : data.website    || '',
-            occupation : data.occupation || '',
-            dob        : '',
-            gender     : 'male',
-            facebook   : '',
-            education  : '',
-            experience : '',
-            skills     : '',
-            createdAt  : Date.now(),
-            updatedAt  : Date.now()
-        };
-        saveUsers(users);
-        return { success: true };
     }
 
-    function login(email, password, remember) {
-        var users = getUsers();
-        var user  = users[email];
-        if (!user) {
-            return { success: false, message: 'Email không tồn tại trong hệ thống!' };
+    async function logout() {
+        await auth.signOut();
+        window.location.reload();
+    }
+
+    async function updateProfile(data) {
+        if (!auth.currentUser) return { success: false, message: 'Chưa đăng nhập!' };
+        try {
+            const allowed = ['fullname','phone','bio','location','website','occupation','avatar','role','dob','gender','facebook','education','experience','skills'];
+            const updateData = {};
+            allowed.forEach(key => {
+                if (data[key] !== undefined) updateData[key] = data[key];
+            });
+            updateData.updatedAt = Date.now();
+
+            await db.collection('users').doc(auth.currentUser.uid).update(updateData);
+            currentUserData = { ...currentUserData, ...updateData };
+            return { success: true, user: currentUserData };
+        } catch (error) {
+            return { success: false, message: error.message };
         }
-        if (user.password !== hashPassword(password)) {
-            return { success: false, message: 'Mật khẩu không đúng!' };
-        }
-        
-        // Gọi hàm saveSession với cờ remember (true/false)
-        saveSession(email, remember);
-        return { success: true, user: user };
     }
 
-    function logout() {
-        clearSession();
-        window.location.reload(); // Tự động load lại trang khi đăng xuất
-    }
-
-    function updateProfile(data) {
-        var session = getSession();
-        if (!session) return { success: false, message: 'Chưa đăng nhập!' };
-        var users = getUsers();
-        var user  = users[session.email];
-        if (!user) return { success: false, message: 'Người dùng không tồn tại!' };
-
-        // Mảng các trường dữ liệu được phép cập nhật (Không cho phép đổi email ở đây)
-        var allowed = [
-            'fullname','phone','bio','location','website','occupation','avatar','role',
-            'dob','gender','facebook','education','experience','skills'
-        ];
-        
-        allowed.forEach(function (key) {
-            if (data[key] !== undefined) user[key] = data[key];
-        });
-        
-        user.updatedAt = Date.now();
-        saveUsers(users);
-        return { success: true, user: user };
-    }
-
-    function changePassword(currentPassword, newPassword) {
-        var session = getSession();
-        if (!session) return { success: false, message: 'Chưa đăng nhập!' };
-        var users = getUsers();
-        var user  = users[session.email];
-        if (!user) return { success: false, message: 'Người dùng không tồn tại!' };
-        if (user.password !== hashPassword(currentPassword)) {
+    async function changePassword(currentPassword, newPassword) {
+        try {
+            // Xác thực lại trước khi đổi pass để bảo mật
+            const user = auth.currentUser;
+            const cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+            await user.reauthenticateWithCredential(cred);
+            
+            await user.updatePassword(newPassword);
+            return { success: true };
+        } catch (error) {
             return { success: false, message: 'Mật khẩu hiện tại không đúng!' };
         }
-        
-        user.password  = hashPassword(newPassword);
-        user.updatedAt = Date.now();
-        saveUsers(users);
-        
-        // Xoá session để bắt buộc đăng nhập lại bằng mật khẩu mới
-        clearSession(); 
-        return { success: true };
     }
 
-    function forgotPassword(email) {
-        var users = getUsers();
-        if (!users[email]) {
-            return { success: false, message: 'Email không tồn tại trong hệ thống!' };
+    async function forgotPassword(email) {
+        try {
+            await auth.sendPasswordResetEmail(email);
+            return { success: true };
+        } catch (error) {
+            let msg = 'Lỗi gửi email!';
+            if (error.code === 'auth/user-not-found') msg = 'Email không tồn tại trong hệ thống!';
+            return { success: false, message: msg };
         }
-        return { success: true };
     }
 
     function requireAuth() {
