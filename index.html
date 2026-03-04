@@ -464,8 +464,8 @@ body.dark-mode .user-msg { background: #7ececa; color: #111827; }
         <button class="btn-main" onclick="doLogin()" data-i18n="loginBtn">Đăng nhập</button>
         <div class="divider"><span data-i18n="orWith">Hoặc đăng nhập với</span></div>
         <div class="social-row">
-          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔵 Facebook</button>
-          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔴 Google</button>
+          <button class="btn-social" onclick="doSocialLogin('facebook')">🔵 Facebook</button>
+          <button class="btn-social" onclick="doSocialLogin('google')">🔴 Google</button>
         </div>
         <div class="link-row" data-i18n-html="noAccountRow">Chưa có tài khoản? <a onclick="showPage('page-register')">Đăng ký ngay</a></div>
       </div>
@@ -526,8 +526,8 @@ body.dark-mode .user-msg { background: #7ececa; color: #111827; }
         <button class="btn-main" onclick="doRegister()" data-i18n="regBtn">Đăng ký</button>
         <div class="divider"><span data-i18n="orWith">Hoặc đăng ký với</span></div>
         <div class="social-row">
-          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔵 Facebook</button>
-          <button class="btn-social" onclick="toast('toastComingSoon','info')">🔴 Google</button>
+          <button class="btn-social" onclick="doSocialLogin('facebook')">🔵 Facebook</button>
+          <button class="btn-social" onclick="doSocialLogin('google')">🔴 Google</button>
         </div>
         <div class="link-row" data-i18n-html="hasAccountRow">Đã có tài khoản? <a onclick="showPage('page-login')">Đăng nhập ngay</a></div>
       </div>
@@ -1342,6 +1342,24 @@ async function doLogin() {
     updateUserUI();
     showPage('page-home');
   } else {
+    CEP_SETTINGS.showToast(res.message, 'error');
+  }
+}
+
+// Hàm mới để đăng nhập Google/Facebook
+async function doSocialLogin(provider) {
+  if(typeof CEP_AUTH === 'undefined') return alert("Lỗi: Không tìm thấy thư viện AUTH!");
+  
+  var res;
+  if (provider === 'google') res = await CEP_AUTH.loginWithGoogle();
+  if (provider === 'facebook') res = await CEP_AUTH.loginWithFacebook();
+
+  if(res && res.success) {
+    var msg = t('toastLoginOk').replace('{name}', res.user.fullname || "Bạn");
+    if(typeof CEP_SETTINGS !== 'undefined') CEP_SETTINGS.showToast(msg, 'success');
+    updateUserUI();
+    showPage('page-home');
+  } else if (res) {
     CEP_SETTINGS.showToast(res.message, 'error');
   }
 }
